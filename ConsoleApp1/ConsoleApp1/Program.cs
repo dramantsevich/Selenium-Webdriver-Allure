@@ -35,14 +35,27 @@ namespace ConsoleApp1
             {
                 Console.WriteLine(c.ToString());
             }
+
             Console.WriteLine("\n\n");
-            var sortedCars = from c in cars //сортировка кмоплектующего без учёта модели автомобиля
-                             orderby c.Cost
+
+            var sortedCars = from c in cars //сортировка комплектующего без учёта модели автомобиля
+                             orderby c.ComplectationCost
                              select c;
 
             foreach(Car c in sortedCars)
             {
-                Console.WriteLine(c.ToString());
+                Console.WriteLine(c.ComplectationCost);
+            }
+
+            Console.WriteLine("\n\n");
+
+            var sortedCarCost = from c in cars
+                                orderby c.CarCost
+                                select c;
+
+            foreach(Car c in sortedCarCost)
+            {
+                Console.WriteLine(c.CarCost);
             }
 
             Console.ReadKey();

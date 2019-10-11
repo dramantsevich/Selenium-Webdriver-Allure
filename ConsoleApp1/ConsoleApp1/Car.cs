@@ -13,14 +13,17 @@ namespace ConsoleApp1
             CVT
         }
 
+        protected string model = "LandCruiser";
         private double engineSize;
         private string color;
         private int selectedTransmission;
 
         const int colorCost = 400;
         private int complectationCost;
-        private int carCost;
-        private int transmissionCost = 0;
+        private int transmissionCost;
+        const int LandCruiserCost = 4500;
+
+        public int CarCost { get; set; }
 
         public double EngineSize
         {
@@ -67,21 +70,15 @@ namespace ConsoleApp1
         {
             get { return complectationCost = 200 * Convert.ToInt32(EngineSize) + colorCost + transmissionCost; }
         }
-
-        public int CarCost
+        
+        public virtual void DisplayCarCost()
         {
-            get { if((Car)object is LandCruiser)//если машина это LC то + цена LC
-                return carCost = ComplectationCost + 123; }
+            //пример полиморфизма
         }
 
         public void DisplayComplectationCost()
         {
             Console.WriteLine(ComplectationCost);
-        }
-
-        public void DisplayCarCost()
-        {
-            Console.WriteLine(CarCost);
         }
 
         public string CarsEquipment()

@@ -7,7 +7,6 @@ namespace ConsoleApp1
     class LandCruiser : Car
     {
         private string model;
-        private int LandCruiserCost;
         const int modelLCCost = 4500;
 
         public string Model
@@ -15,9 +14,14 @@ namespace ConsoleApp1
             get { return model = "LandCruiser"; }
         }
 
+        public override void DisplayCarCost()
+        {
+            this.CarCost = this.ComplectationCost + modelLCCost;
+        }
+
         public override string ToString()
         {
-            return $"{this.Model}\n {this.CarsEquipment()}\n cost:{LandCruiserCost = this.Cost + modelLCCost}";
+            return $"{this.Model}\n {this.CarsEquipment()}\n cost:{this.CarCost}";
         }
 
         public LandCruiser(double _engineSize, string _color, int _selectedTransmission)
@@ -25,6 +29,7 @@ namespace ConsoleApp1
             EngineSize = _engineSize;
             Color = _color;
             SelectedTransmission = _selectedTransmission;
+            DisplayCarCost();
         }
     }
 }
