@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ToyotaManagerHelper
 {
@@ -11,7 +12,7 @@ namespace ToyotaManagerHelper
         {
 
             //string path = Path.Combine(Directory.GetCurrentDirectory(), @"CarsAvailable.txt");
-            string path = @"..\..\CarsAvailable.txt";
+            string path = @"..\..\..\..\CarsAvailable.txt";
 
             using (StreamReader sr = new StreamReader(path))
             {
@@ -128,6 +129,7 @@ namespace ToyotaManagerHelper
         {
             List<Car> cars = new List<Car>();
             bool isQuit = false;
+            Regex regex = new Regex("^[0-9]+$");
             
             AvailableCarsFromFile(cars);
 
@@ -167,7 +169,21 @@ namespace ToyotaManagerHelper
                         Console.WriteLine("Input range of the price for the car[a,b]: ");
                         string a = Console.ReadLine();
                         string b = Console.ReadLine();
-                        GetComplectationOfPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b));
+
+                        while (true) {
+                            if ((!regex.IsMatch(a) && !regex.IsMatch(b)) || !regex.IsMatch(a) || !regex.IsMatch(b))
+                            {
+                                Console.WriteLine("Erorr, input range of the price for the car[a,b]:  ");
+                                a = Console.ReadLine();
+                                b = Console.ReadLine();
+                            }
+                            if (regex.IsMatch(a) && regex.IsMatch(b))
+                            {
+                                GetComplectationOfPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b));
+                                break;
+                            }
+                        }
+                        
                         Console.ReadKey();
                         break;
                     case "5":
