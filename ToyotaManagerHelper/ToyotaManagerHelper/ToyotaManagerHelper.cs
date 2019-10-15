@@ -138,9 +138,9 @@ namespace ToyotaManagerHelper
                 Console.Clear();
 
                 Console.WriteLine("1 - to view information about cars\n" +
-                "2 - calculate the cost of the car depending on the selected configuration\n" +
-                "3 - sort cars by price\n" +
-                "4 - find a package that matches a given price range\n" +
+                "2 - to calculate the cost of the car depending on the selected configuration\n" +
+                "3 - to sort cars by price\n" +
+                "4 - to find a complete set that corresponds to a given price range\n" +
                 "5 - quit\n");
                 string selection = Console.ReadLine();
 
