@@ -18,7 +18,7 @@ namespace ToyotaManager
             foreach (Car c in sortedCars)
             {
                 costs.Add(c.ComplectationCost);
-                Console.WriteLine(c.ComplectationCost);
+                Console.WriteLine(c.CarCost);
             }
 
             Console.WriteLine("\n\n");
