@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToyotaManagerHelper", "ToyotaManagerHelper\ToyotaManagerHelper.csproj", "{4C49BD62-A448-4E0B-9BDA-6B75CCA5AE79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToyotaManagerHelper.Tests", "ToyotaManagerHelper.Tests\ToyotaManagerHelper.Tests.csproj", "{1E5B605E-1266-415B-84EB-E968E1FBA07D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C49BD62-A448-4E0B-9BDA-6B75CCA5AE79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C49BD62-A448-4E0B-9BDA-6B75CCA5AE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C49BD62-A448-4E0B-9BDA-6B75CCA5AE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C49BD62-A448-4E0B-9BDA-6B75CCA5AE79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5B605E-1266-415B-84EB-E968E1FBA07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5B605E-1266-415B-84EB-E968E1FBA07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5B605E-1266-415B-84EB-E968E1FBA07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5B605E-1266-415B-84EB-E968E1FBA07D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEF3ED0A-D60E-493E-8A1B-1091965F746F}
+	EndGlobalSection
+EndGlobal
