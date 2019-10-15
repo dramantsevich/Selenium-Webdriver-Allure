@@ -10,9 +10,10 @@ namespace ToyotaManagerHelper
         public static List<Car> AvailableCarsFromFile(List<Car> cars)
         {
 
-            string path = Path.Combine(Directory.GetCurrentDirectory(), @"CarsAvailable.txt");
+            //string path = Path.Combine(Directory.GetCurrentDirectory(), @"CarsAvailable.txt");
+            string path = @"..\..\CarsAvailable.txt";
 
-            using (StreamReader sr = new StreamReader(Path.GetFullPath(path)))
+            using (StreamReader sr = new StreamReader(path))
             {
                 string line;
 
