@@ -79,7 +79,7 @@ namespace ManagerHelper
             IEnumerable<Car> castedCars = cars.Cast<Car>();
             return castedCars;
         }
-        public static void DisplaySortedCarInformation(IEnumerable<Car> cars)
+        public static void DisplayCarInformation(IEnumerable<Car> cars)
         {
             foreach (Car c in cars)
             {
@@ -252,8 +252,7 @@ namespace ManagerHelper
                     case "3":
                         Console.Clear();
 
-                        //DisplayCarInformation(CarCost(cars));
-                        DisplaySortedCarInformation(SortCarCost(cars));
+                        DisplayCarInformation(SortCarCost(cars));
 
                         Console.ReadKey();
                         break;
@@ -264,7 +263,7 @@ namespace ManagerHelper
                         string a = Console.ReadLine();
                         string b = Console.ReadLine();
 
-                        DisplaySortedCarInformation(SortCarCost(CarsInPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b))));
+                        DisplayCarInformation(SortCarCost(CarsInPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b))));
 
                         Console.ReadKey();
                         break;
