@@ -7,17 +7,11 @@ using System.Reflection;
 
 namespace ManagerHelper
 {
-    public class ManagerHelper
+    public class Managerhelper
     {
-        public static IEnumerable<Car> GetAvailableCars(List<Car> cars)
+        public static void GetAvailableCars(List<Car> cars)
         {
-            //Assembly _assembly;
-            string path = @"..\..\..\Properties\CarsAvailable.txt";
-            //StreamReader _textStreamReader;
-
-            //_assembly = Assembly.GetExecutingAssembly();
-            //_textStreamReader = new StreamReader(_assembly.GetManifestResourceStream("ManagerHelper.CarsAvailable.txt"));
-            //_textStreamReader = new StreamReader(Properties.Resources.CarsAvailable);
+            string path = @"..\..\..\Resources\CarsAvailable.txt";
 
             using (StreamReader _textStreamReader = new StreamReader(path))
             {
@@ -30,7 +24,7 @@ namespace ManagerHelper
 
 
                     if (words[0] == typeof(LandCruiser).Name)
-                    {
+                     {
                         if (words[3] == "Manual" || words[3] == "manual")
                         {
                             cars.Add(new LandCruiser(d, words[2], 1));
@@ -76,134 +70,107 @@ namespace ManagerHelper
                     }
                 }
             }
-            IEnumerable<Car> castedCars = cars.Cast<Car>();
-            return castedCars;
-        }
-        public static void DisplayCarInformation(IEnumerable<Car> cars)
-        {
-            foreach (Car c in cars)
-            {
-                Console.WriteLine(c.CarInformation());
-            }
         }
 
         public static Car CreateSelectedModel(string str)
         {
             Car selectedModel = new Car();
 
-            if ((str == typeof(LandCruiser).Name) || (str.ToUpper() == typeof(LandCruiser).Name) || (str.ToLower() == typeof(LandCruiser).Name))
+            if(str == "1")
             {
                 selectedModel = new LandCruiser();
+
+                SetConfigurations(selectedModel);
+
+                return selectedModel;
             }
-            if ((str == typeof(Camry).Name) || (str.ToUpper() == typeof(Camry).Name) || (str.ToLower() == typeof(Camry).Name))
+            if (str == "2")
             {
                 selectedModel = new Camry();
+
+                SetConfigurations(selectedModel);
+
+                return selectedModel;
             }
-            if ((str == typeof(Corolla).Name) || (str.ToUpper() == typeof(Corolla).Name) || (str.ToLower() == typeof(Corolla).Name))
+            if (str == "3")
             {
                 selectedModel = new Corolla();
-            }
 
-            return selectedModel;
+                SetConfigurations(selectedModel);
+
+                return selectedModel;
+            }
+            return null;
         }
 
-        public static void DisplayCalculatedCostConfiguration(Car obj)
-        {
-            bool isTrue = true;
-
-            Console.WriteLine("Input engine size (1.8, 2.0, 3.0)");
+        public static Car SetConfigurations(Car car)
+        {// тесты на вводимые значения
+            Console.WriteLine("Input engine size (1.8, 2.0, 3.0)");//только через запятую, не буквы; не 2,03490401340; 
             string selectedEngineSize = Console.ReadLine();
 
-            do
-            {
-                try
-                {
-                    obj.EngineSize = Convert.ToDouble(selectedEngineSize.Replace(".", ","));
-                    isTrue = false;
-                }
-                catch
-                {
-                    Console.WriteLine("Try input engine size (1.8, 2.0, 3.0): for example '1.8' or '1,8'");
-                    selectedEngineSize = Console.ReadLine();
-                }
-            } while (isTrue);
+            car.EngineSize = Convert.ToDouble(selectedEngineSize.Replace(".", ","));
 
-            Console.WriteLine("Input color: Green, Black, Red, Blue");
+            Console.WriteLine("Input color: Green, Black, Red, Blue");//один из этих 4 цветов
             string selectedColor = Console.ReadLine();
 
-            do
+            if (selectedColor == "Green" || selectedColor == "Black" || selectedColor == "Red" || selectedColor == "Blue")
             {
-                if (selectedColor == "Green" || selectedColor == "Black" || selectedColor == "Red" || selectedColor == "Blue")
-                {
-                    obj.Color = selectedColor;
-                    isTrue = false;
-                }
-                else
-                {
-                    Console.WriteLine("Try to input: Green, Black, Red, Blue");
-                    selectedColor = Console.ReadLine();
-                }
-            } while (isTrue);
-            
+                car.Color = selectedColor;
+            }
 
-            Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");
+            Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");//4 - недопустимо; буквы тоже
             string selectedTransmission = Console.ReadLine();
 
-            do
+            if (Convert.ToInt32(selectedTransmission) == 1 || Convert.ToInt32(selectedTransmission) == 2 || Convert.ToInt32(selectedTransmission) == 3)
             {
-                if (Convert.ToInt32(selectedTransmission) == 1 || Convert.ToInt32(selectedTransmission) == 2 || Convert.ToInt32(selectedTransmission) == 3)
-                {
-                    obj.SelectedTransmission = Convert.ToInt32(selectedTransmission);
-                    isTrue = false;
-                }
-                else
-                {
-                    Console.WriteLine("Try to input: 1-Manual, 2-Automatic, 3-CVT");
-                    selectedTransmission = Console.ReadLine();
-                }
-            } while (isTrue);
+                car.SelectedTransmission = Convert.ToInt32(selectedTransmission);
+            }
 
-            Console.WriteLine($"\n {obj.CarInformation()}");
+            return car;
         }
 
-        public static IEnumerable<Car> SortCarCost(IEnumerable<Car> cars)
+        static void DisplaySelectedConfiguration(Car car)
         {
-            var sort = from c in cars
-                       orderby c.Cost
-                       select c;
-
-            IEnumerable<Car> sortedCarsCost = sort.Cast<Car>();
-
-            return sortedCarsCost;
+            Console.WriteLine(car.CarInformation());
         }
 
-        public static IEnumerable<Car> CarsInPriceRange(IEnumerable<Car> cars, int a,int b)
-        {
-            //Price range for cars [a,b]
+        public static void SortCarCost(List<Car> cars)
+        {//a - first car, b - next car
+            cars.Sort((a,b) => a.Cost.CompareTo(b.Cost));
+            DisplayCarsInformation(cars);
+        }
+
+        public static void CarsInPriceRange (List<Car> cars, int a, int b)
+        {// написать тесты для интов, только инты могут передаваться; а < b иначе не выведет; больше 0
             List<Car> listCarsInRange = new List<Car>();
 
-            foreach(Car car in cars)
-            { 
+            foreach (Car car in cars)
+            {
                 if (car.Cost >= a && car.Cost <= b)
                 {
                     listCarsInRange.Add(car);
                 }
             }
-            IEnumerable<Car> carsInRange = listCarsInRange.Cast<Car>();
-
-            return carsInRange;
+            SortCarCost(listCarsInRange);
+            DisplayCarsInformation(listCarsInRange);
         }
 
+        static void DisplayCarsInformation(List<Car> cars)
+        {
+            foreach(Car c in cars)
+            {
+                Console.WriteLine(c.CarInformation());
+            }
+        }
 
         static void Main(string[] args)
         {
-            List<Car> listCars = new List<Car>();
-            IEnumerable<Car> cars = listCars.Cast<Car>();
+            List<Car> cars = new List<Car>();
             bool isQuit = false;
 
-            GetAvailableCars(listCars);
+            GetAvailableCars(cars);
 
-            while (!isQuit)
+            do
             {
                 Console.Clear();
 
@@ -216,63 +183,61 @@ namespace ManagerHelper
 
                 switch (selection)
                 {
+                    #region case "1"
                     case "1":
                         Console.Clear();
-                        
-                        foreach(Car c in cars)
-                        {
-                            Console.WriteLine(c.CarInformation());
-                        }
 
+                        DisplayCarsInformation(cars);
+
+                        Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
                         break;
+                    #endregion
+                    #region case "2"
                     case "2":
                         Console.Clear();
-                        Console.WriteLine("Input model: LandCruiser, Camry, Corolla");
+                        Console.WriteLine("Enter model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
                         string selectedModel = Console.ReadLine();
 
-                        bool isTrue = true;
-
-                        do
+                        if(selectedModel == "1" || selectedModel == "2" || selectedModel == "3")
                         {
-                            if (selectedModel == "LandCruiser" || selectedModel == "Camry" || selectedModel == "Corolla")
-                            {
-                                DisplayCalculatedCostConfiguration(CreateSelectedModel(selectedModel));
-                                isTrue = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Try to input: LandCruiser, Camry, Corolla");
-                                selectedModel = Console.ReadLine();
-                            }
-                        } while (isTrue);
+                            CreateSelectedModel(selectedModel);
+                        }
+                        else Console.WriteLine("\n\n\n Incorrect data");
 
+                        Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
                         break;
+                    #endregion
+                    #region case "3"
                     case "3":
                         Console.Clear();
 
-                        DisplayCarInformation(SortCarCost(cars));
+                        SortCarCost(cars);
 
+                        Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
                         break;
+                    #endregion
+                    #region case"4"
                     case "4":
                         Console.Clear();
 
-                        Console.WriteLine("Input range[a,b] of the price for the car: ");
+                        Console.WriteLine("Enter range of the price for the car: ");
                         string a = Console.ReadLine();
                         string b = Console.ReadLine();
 
-                        DisplayCarInformation(SortCarCost(CarsInPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b))));
+                        CarsInPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b));   
 
+                        Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
                         break;
+                    #endregion
                     case "5":
                         isQuit = true;
                         break;
                 }
-            }
-
+            } while (!isQuit);
         }
     }
 }
