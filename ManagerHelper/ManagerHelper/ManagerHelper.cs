@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace ManagerHelper
 {
-    public class ManagerHelper
+    public class Managerhelper
     {
         public static void GetAvailableCars(List<Car> cars)
         {
@@ -102,28 +102,44 @@ namespace ManagerHelper
         }
         public static Car SetConfigurations(Car car)
         {// тесты на вводимые значения
-            SetEngineSize(car);
-            SetSelectedColor(car);
-            SetSelectedTransmission(car);
+            Console.WriteLine("Input engine size (1.8, 2.0, 3.0)");//только через запятую, не буквы; не 2,03490401340; 
+            string selectedEngineSize = Console.ReadLine();
+            SetEngineSize(car, selectedEngineSize);
+
+
+            Console.WriteLine("Input color: Green, Black, Red, Blue");//один из этих 4 цветов
+            string selectedColor = Console.ReadLine();
+            SetSelectedColor(car, selectedColor);
+
+            Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");//4 - недопустимо; буквы тоже
+            string selectedTransmission = Console.ReadLine();
+            SetSelectedTransmission(car, selectedTransmission);
 
             DisplaySelectedConfiguration(car);
 
             return car;
         }
-        public static Car SetEngineSize(Car car)
+        public static Car SetEngineSize(Car car,string selectedEngineSize)
         {
-            Console.WriteLine("Input engine size (1.8, 2.0, 3.0)");//только через запятую, не буквы; не 2,03490401340; 
-            string selectedEngineSize = Console.ReadLine();
+            double selectedEngineSizeToDouble = Convert.ToDouble(selectedEngineSize.Replace(".", ","));
 
-            car.EngineSize = Convert.ToDouble(selectedEngineSize.Replace(".", ","));
+            car.EngineSize = selectedEngineSizeToDouble;
 
             return car;
         }
-
-        public static Car SetSelectedTransmission(Car car)
+        public static Car SetSelectedColor(Car car, string selectedColor)
         {
-            Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");//4 - недопустимо; буквы тоже
-            string selectedTransmission = Console.ReadLine();
+            if (selectedColor == "Green" || selectedColor == "Black" || selectedColor == "Red" || selectedColor == "Blue")
+            {
+                car.Color = selectedColor;
+                return car;
+            }
+
+            return null;
+        }
+
+        public static Car SetSelectedTransmission(Car car, string selectedTransmission)
+        {
 
             if (Convert.ToInt32(selectedTransmission) == 1 || Convert.ToInt32(selectedTransmission) == 2 || Convert.ToInt32(selectedTransmission) == 3)
             {
@@ -133,19 +149,6 @@ namespace ManagerHelper
             return null;
         }
 
-        public static Car SetSelectedColor(Car car)
-        {
-            Console.WriteLine("Input color: Green, Black, Red, Blue");//один из этих 4 цветов
-            string selectedColor = Console.ReadLine();
-
-            if (selectedColor == "Green" || selectedColor == "Black" || selectedColor == "Red" || selectedColor == "Blue")
-            {
-                car.Color = selectedColor;
-                return car;
-            }
-
-            return null;
-        }
         public static void DisplaySelectedConfiguration(Car car)
         {
             Console.WriteLine(car.CarInformation());
