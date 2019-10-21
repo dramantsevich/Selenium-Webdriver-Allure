@@ -37,12 +37,12 @@ namespace ManagerHelper
                 }
                 if ((int)transmission.Automatic == 2)
                 {
-                    transmissionCost = 2930;
+                    transmissionCost = 3630;
                     selectedTransmission = value;
                 }
                 if ((int)transmission.CVT == 3)
                 {
-                    transmissionCost = 3330;
+                    transmissionCost = 2930;
                     selectedTransmission = value;
                 }
             }
@@ -53,15 +53,15 @@ namespace ManagerHelper
             {
                 if (this.GetType().Name == "LandCruiser")
                 {
-                    return cost = LandCruiserCost + Convert.ToInt32(1310 * this.EngineSize) + colorCost + this.transmissionCost;
+                    return cost = LandCruiserCost + Convert.ToInt32(220 * this.EngineSize) + colorCost + this.transmissionCost;
                 }
                 if (this.GetType().Name == "Corolla")
                 {
-                    return cost = CorollaCost + Convert.ToInt32(1310 * this.EngineSize) + colorCost + this.transmissionCost;
+                    return cost = CorollaCost + Convert.ToInt32(220 * this.EngineSize) + colorCost + this.transmissionCost;
                 }
                 if (this.GetType().Name == "Camry")
                 {
-                    return cost = CamryCost + Convert.ToInt32(1310 * this.EngineSize) + colorCost + this.transmissionCost;
+                    return cost = CamryCost + Convert.ToInt32(220 * this.EngineSize) + colorCost + this.transmissionCost;
                 }
                 return cost;
             }
