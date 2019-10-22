@@ -70,7 +70,7 @@ namespace ManagerHelper
                 }
             }
         }
-        public static Car CreateSelectedModel(string str)
+        public static void CreateSelectedModel(string str)
         {
             Car selectedModel = new Car();
 
@@ -79,56 +79,49 @@ namespace ManagerHelper
                 selectedModel = new LandCruiser();
 
                 SetConfigurations(selectedModel);
-
-                return selectedModel;
             }
             if (str == "2")
             {
                 selectedModel = new Camry();
 
                 SetConfigurations(selectedModel);
-
-                return selectedModel;
             }
             if (str == "3")
             {
                 selectedModel = new Corolla();
 
                 SetConfigurations(selectedModel);
-
-                return selectedModel;
             }
-            return null;
         }
-        public static Car SetConfigurations(Car car)
+        public static void SetConfigurations(Car car)
         {// тесты на вводимые значения
-            Console.WriteLine("Input engine size (1.8, 2.0, 3.0)");//только через запятую, не буквы; не 2,03490401340; 
+            //проверка что если ъоть 1 конфиг тачки не равен null или 0
+            Console.WriteLine("Input engine size (1.8, 2.0, 3.0)"); 
             string selectedEngineSize = Console.ReadLine();
             SetEngineSize(car, selectedEngineSize);
 
-
-            Console.WriteLine("Input color: 1-Green, 2-Black, 3-Red, 4-Blue");//один из этих 4 цветов
+            Console.WriteLine("Input color: 1-Green, 2-Black, 3-Red, 4-Blue");
             string selectedColor = Console.ReadLine();
             SetSelectedColor(car, selectedColor);
 
-            Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");//4 - недопустимо; буквы тоже
+            Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");
             string selectedTransmission = Console.ReadLine();
             SetSelectedTransmission(car, selectedTransmission);
 
             DisplaySelectedConfiguration(car);
-
-            return car;
         }
 
-        public static Car SetEngineSize(Car car,string selectedEngineSize)
+        public static Car SetEngineSize(Car car, string selectedEngineSize)
         {
-            double selectedEngineSizeToDouble = Convert.ToDouble(selectedEngineSize.Replace(".", ","));
+            double selectedEngineSizeToDouble = Convert.ToDouble(selectedEngineSize);
 
-            if (car.EngineSize != null)
+            if (car.EngineSize == 0)
             {
                 car.EngineSize = selectedEngineSizeToDouble;
                 return car;
             }
+            else
+                Console.WriteLine("Incorrect data in engine size");
 
             return null;
         }
@@ -140,20 +133,16 @@ namespace ManagerHelper
                 case "1":
                     car.Color = "Green";
                     return car;
-                    break;
                 case "2":
                     car.Color = "Black";
                     return car;
-                    break;
                 case "3":
                     car.Color = "Red";
                     return car;
-                    break;
                 case "4":
                     car.Color = "Blue";
                     return car;
-                    break;
-                default: Console.WriteLine("Incorrect data");
+                default: Console.WriteLine("Incorrect data in selected color");
                     return null;
             }
         }
@@ -161,12 +150,21 @@ namespace ManagerHelper
         public static Car SetSelectedTransmission(Car car, string selectedTransmission)
         {
 
-            if (Convert.ToInt32(selectedTransmission) == 1 || Convert.ToInt32(selectedTransmission) == 2 || Convert.ToInt32(selectedTransmission) == 3)
+            switch (selectedTransmission)
             {
-                car.SelectedTransmission = Convert.ToInt32(selectedTransmission);
-                return car;
+                case "1":
+                    car.SelectedTransmission = 1;
+                    return car;
+                case "2":
+                    car.SelectedTransmission = 2;
+                    return car;
+                case "3":
+                    car.SelectedTransmission = 3;
+                    return car;
+                default:
+                    Console.WriteLine("Incorrect data in selected transmission");
+                    return null;
             }
-            return null;
         }
 
         public static void DisplaySelectedConfiguration(Car car)
@@ -179,6 +177,7 @@ namespace ManagerHelper
             cars.Sort((a, b) => a.Cost.CompareTo(b.Cost));
             DisplayCarsInformation(cars);
         }
+
         public static void CarsInPriceRange(List<Car> cars, int a, int b)
         {// написать тесты для интов, только инты могут передаваться; а < b иначе не выведет; больше 0
             List<Car> listCarsInRange = new List<Car>();
@@ -241,7 +240,7 @@ namespace ManagerHelper
                         {
                             CreateSelectedModel(selectedModel);
                         }
-                        else Console.WriteLine("\n\n\n Incorrect data");
+                        else Console.WriteLine("\n\n\n Incorrect data, try to input: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
 
                         Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
@@ -264,6 +263,7 @@ namespace ManagerHelper
                         Console.WriteLine("Enter range of the price for the car: ");
                         string a = Console.ReadLine();
                         string b = Console.ReadLine();
+
 
                         CarsInPriceRange(cars, Convert.ToInt32(a), Convert.ToInt32(b));
 
