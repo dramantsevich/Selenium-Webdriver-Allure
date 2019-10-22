@@ -107,7 +107,7 @@ namespace ManagerHelper
             SetEngineSize(car, selectedEngineSize);
 
 
-            Console.WriteLine("Input color: Green, Black, Red, Blue");//один из этих 4 цветов
+            Console.WriteLine("Input color: 1-Green, 2-Black, 3-Red, 4-Blue");//один из этих 4 цветов
             string selectedColor = Console.ReadLine();
             SetSelectedColor(car, selectedColor);
 
@@ -119,23 +119,43 @@ namespace ManagerHelper
 
             return car;
         }
+
         public static Car SetEngineSize(Car car,string selectedEngineSize)
         {
             double selectedEngineSizeToDouble = Convert.ToDouble(selectedEngineSize.Replace(".", ","));
 
-            car.EngineSize = selectedEngineSizeToDouble;
-
-            return car;
-        }
-        public static Car SetSelectedColor(Car car, string selectedColor)
-        {
-            if (selectedColor == "Green" || selectedColor == "Black" || selectedColor == "Red" || selectedColor == "Blue")
+            if (car.EngineSize != null)
             {
-                car.Color = selectedColor;
+                car.EngineSize = selectedEngineSizeToDouble;
                 return car;
             }
 
             return null;
+        }
+
+        public static Car SetSelectedColor(Car car, string selectedColor)
+        {
+            switch (selectedColor)
+            {
+                case "1":
+                    car.Color = "Green";
+                    return car;
+                    break;
+                case "2":
+                    car.Color = "Black";
+                    return car;
+                    break;
+                case "3":
+                    car.Color = "Red";
+                    return car;
+                    break;
+                case "4":
+                    car.Color = "Blue";
+                    return car;
+                    break;
+                default: Console.WriteLine("Incorrect data");
+                    return null;
+            }
         }
 
         public static Car SetSelectedTransmission(Car car, string selectedTransmission)

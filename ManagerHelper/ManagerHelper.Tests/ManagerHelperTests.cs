@@ -47,7 +47,7 @@ namespace ManagerHelper.Tests
         }
 
         [TestMethod]
-        public void SetEngineSize_InputNumberWithComma_ReturnCar()
+        public void SetEngineSize_InputNumberWithComma_FailTest()
         {
             LandCruiser actualResult = new LandCruiser();
 
@@ -60,17 +60,29 @@ namespace ManagerHelper.Tests
         //тест на введеную букву
 
         [TestMethod]
-        public void SetEngineSize_InputSpace_NoException()
+        public void SetEngineSize_InputSpace_ThrowsFormatException()
         {//unit test на вызов exception c#
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.SetEngineSize(car, " "));
+        }
 
-            try
-            {
-                Managerhelper.SetEngineSize(car, " ");
-            }
-            catch(Exception ex)
-            {
-                Assert.Fail("Expected no exception, but got: " + ex.Message);
-            }
+        [TestMethod]
+        public void SetEngineSize_InputLetters_ThrowsFormatException()
+        {
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.SetEngineSize(car, "qwe"));
+        }
+
+        [TestMethod]
+        public void SetEngineSize_InputEnter_ThrowsFormatException()
+        {
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.SetEngineSize(car, " "));
+        }
+
+        [TestMethod]
+        public void SetSelectedColor_InputPositiveData_PassTest()
+        {
+            object actualResult = Managerhelper.SetSelectedColor(car, "1");
+
+            Assert.Equals(car.Color = "Green", actualResult);
         }
 
         [TestMethod]
