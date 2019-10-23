@@ -113,24 +113,16 @@ namespace ManagerHelper
                             }
                         }
                         else
-                        {
                             Console.WriteLine("Selected transmission is incorrect, try to input transmission: 1-Manual, 2-Automatic, 3-CVT");
-                        }
                     }
                     else
-                    {
                         Console.WriteLine("Selected color is incorrect, try to input color: 1-Green, 2-Black, 3-Red, 4-Blue");
-                    }
                 }
                 else
-                {
                     Console.WriteLine("Selected engine size is incorrect, try to input engine size: 1 - 1.8, 2 - 2.0, 3 - 3.0");
-                }
             }
             else
-            {
                 Console.WriteLine("The entered value is incorrect, try to input model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
-            }
             
         }
         public static bool IsEngineSizeValid(string selectedEngineSize)
@@ -228,6 +220,13 @@ namespace ManagerHelper
             DisplayCarsInformation(cars);
         }
 
+        public static bool IsPriceRangeValid(int startingPrice, int endingPrice)
+        {
+            if (startingPrice <= endingPrice)
+                return true;
+            return false;
+        }
+
         public static void GetCarsInPriceRange(List<Car> cars)
         {// написать тесты для интов, только инты могут передаваться; а < b иначе не выведет; больше 0
             List<Car> listCarsInPriceRange = new List<Car>();
@@ -241,18 +240,21 @@ namespace ManagerHelper
 
             string endingPrice = Console.ReadLine();
 
-            foreach (Car car in cars)
+            if (IsPriceRangeValid(Convert.ToInt32(startingPrice),Convert.ToInt32(endingPrice)))
             {
-                if (car.Cost >= Convert.ToInt32(startingPrice) && car.Cost <= Convert.ToInt32(endingPrice))
+                foreach (Car car in cars)
                 {
-                    listCarsInPriceRange.Add(car);
+                    if (car.Cost >= Convert.ToInt32(startingPrice) && car.Cost <= Convert.ToInt32(endingPrice))
+                    {
+                        listCarsInPriceRange.Add(car);
+                    }
                 }
-            }
-
-            if(listCarsInPriceRange.Count == 0)
-            {
-                Console.WriteLine("In this range there are no available cars");
-            }
+                if (listCarsInPriceRange.Count == 0)
+                {
+                    Console.WriteLine("In this range there are no available cars");
+                }
+            }else
+                Console.WriteLine("The entered data are incorrect, try to enter ending price more then starting price");
 
             SortCarCost(listCarsInPriceRange);
         }
