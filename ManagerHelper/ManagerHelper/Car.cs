@@ -15,16 +15,43 @@ namespace ManagerHelper
 
         //fields
         public double EngineSize { get; set; }
-        public string Color { get; set; }
+        private string color;
         private int selectedTransmission;
         private int cost;
 
         private int transmissionCost;
-        const int colorCost = 450;
+        private int colorCost;
         const int LandCruiserCost = 4310;
         const int CamryCost = 3020;
         const int CorollaCost = 2570;
 
+        public string Color
+        {
+            get { return color; }
+            set
+            {
+                if(value == "Green")
+                {
+                    colorCost = 333 * value.Length;
+                    color = value;
+                }
+                if (value == "Black")
+                {
+                    colorCost = 254 * value.Length;
+                    color = value;
+                }
+                if (value == "Red")
+                {
+                    colorCost = 238 * value.Length;
+                    color = value;
+                }
+                if (value == "Blue")
+                {
+                    colorCost = 220 * value.Length;
+                    color = value;
+                }
+            }
+        }
         public int SelectedTransmission
         {
             get { return selectedTransmission; }

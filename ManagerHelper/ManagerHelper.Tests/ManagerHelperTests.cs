@@ -259,6 +259,83 @@ namespace ManagerHelper.Tests
             Assert.IsNotNull(cars);
         }
 
+        [TestMethod]
+        public void GetCarsInPriceRange_InputSpaceAtStartingPrice_ThrowsFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            string startingPrice = " ";
+            int endingPrice = 1000;
+
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, Convert.ToInt32(startingPrice), endingPrice));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputEnterAtStartingPrice_ThrowsFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            string startingPrice = "";
+            int endingPrice = 1000;
+
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, Convert.ToInt32(startingPrice), endingPrice));
+        }
+        [TestMethod]
+        public void GetCarsInPriceRange_InputLetterAtStartingPrice_ThrowsFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            string startingPrice = "q";
+            int endingPrice = 1000;
+
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, Convert.ToInt32(startingPrice), endingPrice));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputSpaceAtEndingPrice_ThrowsFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            int startingPrice = 1000;
+            string endingPrice = " ";
+
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, startingPrice, Convert.ToInt32(endingPrice)));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputEnterAtEndingPrice_ThrowsFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            int startingPrice = 1000;
+            string endingPrice = "";
+
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, startingPrice, Convert.ToInt32(endingPrice)));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputLetterAtEndingPrice_ThrowsFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            int startingPrice = 1000;
+            string endingPrice = "q";
+
+            Assert.ThrowsException<System.FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, startingPrice, Convert.ToInt32(endingPrice)));
+        }
+
+        //[TestMethod]
+        //public void GetCarsInPriceRange_InputStartingPriceLessThenEndingPrice_CountOfCarsInRange0()
+        //{
+        //    int startingPrice = 8000;
+        //    int endingPrice = 7000;
+
+        //    Managerhelper.GetAvailableCars(cars);
+        //    Managerhelper.GetCarsInPriceRange(cars, startingPrice, endingPrice);
+
+        //    Assert.AreEqual(0, );
+        //}
+
         //[TestMethod]
         //public void SortCarCost_SortedCarCostByCost_IsSorted()
         //{
