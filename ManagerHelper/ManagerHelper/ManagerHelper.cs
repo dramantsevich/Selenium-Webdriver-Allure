@@ -91,7 +91,7 @@ namespace ManagerHelper
                         string selectedTransmission = Console.ReadLine();
                         if (IsTransmissionValid(selectedTransmission))
                         {
-                            Car createdSelectedModel = new Car();
+                            Car createdSelectedModel;
 
                             switch (selectedModel)
                             {
@@ -145,16 +145,16 @@ namespace ManagerHelper
         }
         public static void SetConfigurations(Car car, string selectedEngineSize, string selectedColor, string selectedTransmission)
         {
-            SetEngineSize(car, selectedEngineSize);
+            SetSelectedEngineSize(car, selectedEngineSize);
 
             SetSelectedColor(car, selectedColor);
 
             SetSelectedTransmission(car, selectedTransmission);
 
-            DisplaySelectedConfiguration(car);
+            DisplaySelectedCar(car);
         }
 
-        public static Car SetEngineSize(Car car, string selectedEngineSize)
+        public static Car SetSelectedEngineSize(Car car, string selectedEngineSize)
         {
             switch (selectedEngineSize)
             {
@@ -209,7 +209,7 @@ namespace ManagerHelper
             return null;
         }
 
-        public static void DisplaySelectedConfiguration(Car car)
+        public static void DisplaySelectedCar(Car car)
         {
             Console.WriteLine(car.CarInformation());
         }
@@ -217,7 +217,6 @@ namespace ManagerHelper
         public static void SortCarCost(List<Car> cars)
         {//a - first car, b - next car
             cars.Sort((a, b) => a.Cost.CompareTo(b.Cost));
-            DisplayCarsInformation(cars);
         }
 
         public static bool IsPriceRangeValid(int startingPrice, int endingPrice)
@@ -227,37 +226,43 @@ namespace ManagerHelper
             return false;
         }
 
-        public static void GetCarsInPriceRange(List<Car> cars)
-        {// написать тесты для интов, только инты могут передаваться; а < b иначе не выведет; больше 0
-            List<Car> listCarsInPriceRange = new List<Car>();
+        public static (string, string) SetPriceRange(string startingPrice, string endingPrice)
+        {
+            int startingPriceToInt = Convert.ToInt32(startingPrice);
+            int endingPriceToInt = Convert.ToInt32(endingPrice);
 
-            Console.WriteLine("Enter range of the price for the car: \n");
-            Console.WriteLine("Starting price at ");
-
-            string startingPrice = Console.ReadLine();
-
-            Console.WriteLine("to ");
-
-            string endingPrice = Console.ReadLine();
-
-            if (IsPriceRangeValid(Convert.ToInt32(startingPrice),Convert.ToInt32(endingPrice)))
+            if (IsPriceRangeValid(startingPriceToInt, endingPriceToInt))
             {
-                foreach (Car car in cars)
-                {
-                    if (car.Cost >= Convert.ToInt32(startingPrice) && car.Cost <= Convert.ToInt32(endingPrice))
-                    {
-                        listCarsInPriceRange.Add(car);
-                    }
-                }
-                if (listCarsInPriceRange.Count == 0)
-                {
-                    Console.WriteLine("In this range there are no available cars");
-                }
-            }else
-                Console.WriteLine("The entered data are incorrect, try to enter ending price more then starting price");
+                return (startingPrice, endingPrice);
+            }
 
-            SortCarCost(listCarsInPriceRange);
+            return (null, null);
         }
+
+        public static List<Car> GetCarsInPriceRange(List<Car> cars, string startingPrice, string endingPrice)
+        {
+            int startingPriceToInt = Convert.ToInt32(startingPrice);
+            int endingPriceToInt = Convert.ToInt32(endingPrice);
+
+            List<Car> carsInPriceRange = new List<Car>();
+
+            foreach (Car car in cars)
+            {
+                if (car.Cost >= startingPriceToInt && car.Cost <= endingPriceToInt)
+                {
+                    carsInPriceRange.Add(car);
+                    return carsInPriceRange;
+                }
+            }
+
+            if (carsInPriceRange.Count == 0)
+            {
+                Console.WriteLine("In this range there are no available cars");
+            }
+
+            return null;
+        }
+
         public static void DisplayCarsInformation(List<Car> cars)
         {
             foreach (Car c in cars)
@@ -272,6 +277,7 @@ namespace ManagerHelper
             bool isQuit = false;
 
             GetAvailableCars(cars);
+
 
             do
             {
@@ -311,6 +317,7 @@ namespace ManagerHelper
                         Console.Clear();
 
                         SortCarCost(cars);
+                        DisplayCarsInformation(cars);
 
                         Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
@@ -322,7 +329,14 @@ namespace ManagerHelper
 
                         try
                         {
-                            GetCarsInPriceRange(cars);
+                            Console.WriteLine("Enter range of the price for the car: \nStarting price at ");
+                            string startingPrice = Console.ReadLine();
+
+                            Console.WriteLine("to ");
+                            string endingPrice = Console.ReadLine();
+
+                            SetPriceRange(startingPrice, endingPrice);
+                            GetCarsInPriceRange(cars, startingPrice, endingPrice);
                         }
                         catch (FormatException)
                         {
