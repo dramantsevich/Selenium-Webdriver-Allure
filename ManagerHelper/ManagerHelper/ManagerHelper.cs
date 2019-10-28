@@ -20,62 +20,70 @@ namespace ManagerHelper
                 while ((line = _textStreamReader.ReadLine()) != null)
                 {
                     string[] words = line.Split(new char[] { ' ' });//divide each line into words
-                    double engineSize = Convert.ToDouble(words[1]);
 
-                    if (words[0] == typeof(LandCruiser).Name)
+                    string model = words[0];
+                    double engineSize = Convert.ToDouble(words[1]);
+                    string color = words[2];
+                    string transmission = words[3];
+                    int manualTransmission = 1;
+                    int automaticTransmission = 2;
+                    int CVTTransmission = 3;
+
+                    if (model == typeof(LandCruiser).Name)
                     {
-                        switch (words[3])
+                        switch (transmission)
                         {
                             case "Manual":
-                                cars.Add(new LandCruiser(engineSize, words[2], 1));
+                                cars.Add(new LandCruiser(engineSize, color, manualTransmission));
                                 break;
                             case "Automatic":
-                                cars.Add(new LandCruiser(engineSize, words[2], 2));
+                                cars.Add(new LandCruiser(engineSize, color, automaticTransmission));
                                 break;
                             case "CVT":
-                                cars.Add(new LandCruiser(engineSize, words[2], 3));
+                                cars.Add(new LandCruiser(engineSize, color, CVTTransmission));
                                 break;
                         }
                     }
-                    if (words[0] == typeof(Camry).Name)
+                    if (model == typeof(Camry).Name)
                     {
-                        switch (words[3])
+                        switch (transmission)
                         {
                             case "Manual":
-                                cars.Add(new Camry(engineSize, words[2], 1));
+                                cars.Add(new Camry(engineSize, color, manualTransmission));
                                 break;
                             case "Automatic":
-                                cars.Add(new Camry(engineSize, words[2], 2));
+                                cars.Add(new Camry(engineSize, color, automaticTransmission));
                                 break;
                             case "CVT":
-                                cars.Add(new Camry(engineSize, words[2], 3));
+                                cars.Add(new Camry(engineSize, color, CVTTransmission));
                                 break;
                         }
                     }
-                    if (words[0] == typeof(Corolla).Name)
+                    if (model == typeof(Corolla).Name)
                     {
-                        switch (words[3])
+                        switch (transmission)
                         {
                             case "Manual":
-                                cars.Add(new Corolla(engineSize, words[2], 1));
+                                cars.Add(new Corolla(engineSize, color, manualTransmission));
                                 break;
                             case "Automatic":
-                                cars.Add(new Corolla(engineSize, words[2], 2));
+                                cars.Add(new Corolla(engineSize, color, automaticTransmission));
                                 break;
                             case "CVT":
-                                cars.Add(new Corolla(engineSize, words[2], 3));
+                                cars.Add(new Corolla(engineSize, color, CVTTransmission));
                                 break;
                         }
                     }
                 }
             }
         }
+
         public static void CreateSelectedModel()
         {
             Console.WriteLine("Enter model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
             string selectedModel = Console.ReadLine();
 
-            if(selectedModel == "1" || selectedModel == "2" || selectedModel == "3")
+            if(IsModelValid(selectedModel))
             {
                 Console.WriteLine("Input engine size: 1 - 1.8, 2 - 2.0, 3 - 3.0");
                 string selectedEngineSize = Console.ReadLine();
@@ -91,57 +99,68 @@ namespace ManagerHelper
                         string selectedTransmission = Console.ReadLine();
                         if (IsTransmissionValid(selectedTransmission))
                         {
-                            Car createdSelectedModel;
-
                             switch (selectedModel)
                             {
                                 case "1":
-                                    createdSelectedModel = new LandCruiser();
+                                    Car createdSelectedModelLandCruiser = new LandCruiser();
 
-                                    SetConfigurations(createdSelectedModel, selectedEngineSize, selectedColor, selectedTransmission);
+                                    SetConfigurations(createdSelectedModelLandCruiser, selectedEngineSize, selectedColor, selectedTransmission);
                                     break;
                                 case "2":
-                                    createdSelectedModel = new Camry();
+                                    Car createdSelectedModelCamry = new Camry();
 
-                                    SetConfigurations(createdSelectedModel, selectedEngineSize, selectedColor, selectedTransmission);
+                                    SetConfigurations(createdSelectedModelCamry, selectedEngineSize, selectedColor, selectedTransmission);
                                     break;
                                 case "3":
-                                    createdSelectedModel = new Corolla();
+                                    Car createdSelectedModelCorolla = new Corolla();
 
-                                    SetConfigurations(createdSelectedModel, selectedEngineSize, selectedColor, selectedTransmission);
+                                    SetConfigurations(createdSelectedModelCorolla, selectedEngineSize, selectedColor, selectedTransmission);
                                     break;
                             }
                         }
-                        else
-                            Console.WriteLine("Selected transmission is incorrect, try to input transmission: 1-Manual, 2-Automatic, 3-CVT");
                     }
-                    else
-                        Console.WriteLine("Selected color is incorrect, try to input color: 1-Green, 2-Black, 3-Red, 4-Blue");
                 }
-                else
-                    Console.WriteLine("Selected engine size is incorrect, try to input engine size: 1 - 1.8, 2 - 2.0, 3 - 3.0");
             }
-            else
-                Console.WriteLine("The entered value is incorrect, try to input model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
-            
         }
+
+        public static bool IsModelValid(string selectedModel)
+        {
+            if (selectedModel == "1" || selectedModel == "2" || selectedModel == "3")
+                return true;
+            else
+            {
+                Console.WriteLine("The entered value is incorrect, try to input model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
+                return false;
+            }
+        }
+
         public static bool IsEngineSizeValid(string selectedEngineSize)
         {
             if (selectedEngineSize == "1" || selectedEngineSize == "2" || selectedEngineSize == "3")
                 return true;
-            return false;
+            else
+            {
+                Console.WriteLine("Selected engine size is incorrect, try to input engine size: 1 - 1.8, 2 - 2.0, 3 - 3.0");
+                return false;
+            }
         }
         public static bool IsColorValid(string selectedColor)
         {
             if (selectedColor == "1" || selectedColor == "2" || selectedColor == "3" || selectedColor == "4")
                 return true;
-            return false;
+            else
+            {
+                Console.WriteLine("Selected color is incorrect, try to input color: 1-Green, 2-Black, 3-Red, 4-Blue");
+                return false;
+            }
         }
         public static bool IsTransmissionValid(string selectedTransmission)
         {
             if (selectedTransmission == "1" || selectedTransmission == "2" || selectedTransmission == "3")
                 return true;
-            return false;
+            else { 
+                Console.WriteLine("Selected transmission is incorrect, try to input transmission: 1-Manual, 2-Automatic, 3-CVT");
+            return false;}
         }
         public static void SetConfigurations(Car car, string selectedEngineSize, string selectedColor, string selectedTransmission)
         {
@@ -193,7 +212,6 @@ namespace ManagerHelper
 
         public static Car SetSelectedTransmission(Car car, string selectedTransmission)
         {
-
             switch (selectedTransmission)
             {
                 case "1":

@@ -12,7 +12,6 @@ namespace ManagerHelper.Tests
     {
 
         Car car = new Car();
-
         List<Car> cars = new List<Car>();
 
         //Test for method GetAvailableCarsTest
@@ -23,6 +22,56 @@ namespace ManagerHelper.Tests
 
             Assert.IsNotNull(cars);
         }
+
+        #region//Tests for method IsModelValid
+        [TestMethod]
+        public void IsModelValid_EnterCorrectModel1_ReturnTrue()
+        {
+            Assert.IsTrue(Managerhelper.IsModelValid("1"));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterCorrectModel2_ReturnTrue()
+        {
+            Assert.IsTrue(Managerhelper.IsModelValid("2"));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterCorrectModel3_ReturnTrue()
+        {
+            Assert.IsTrue(Managerhelper.IsModelValid("3"));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterIncorrectDataDot_ReturnFlase()
+        {
+            Assert.IsFalse(Managerhelper.IsModelValid("."));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterIncorrectDataComma_ReturnFlase()
+        {
+            Assert.IsFalse(Managerhelper.IsModelValid(","));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterIncorrectDataEnter_ReturnFlase()
+        {
+            Assert.IsFalse(Managerhelper.IsModelValid(""));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterIncorrectDataSpace_ReturnFlase()
+        {
+            Assert.IsFalse(Managerhelper.IsModelValid(" "));
+        }
+
+        [TestMethod]
+        public void IsModelValid_EnterIncorrectDataLetters_ReturnFlase()
+        {
+            Assert.IsFalse(Managerhelper.IsModelValid("ls"));
+        }
+        #endregion
 
         #region//Tests for method IsEngineSizeValid
         [TestMethod]
