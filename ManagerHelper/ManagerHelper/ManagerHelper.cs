@@ -214,16 +214,28 @@ namespace ManagerHelper
             Console.WriteLine(car.CarInformation());
         }
 
-        public static void SortCarCost(List<Car> cars)
-        {//a - first car, b - next car
-            cars.Sort((a, b) => a.Cost.CompareTo(b.Cost));
+        public static List<Car> SortCarCost(List<Car> cars)
+        {
+            cars.Sort((firstCar, nextCar) => firstCar.Cost.CompareTo(nextCar.Cost));
+            return cars;
         }
 
         public static bool IsPriceRangeValid(int startingPrice, int endingPrice)
         {
-            if (startingPrice <= endingPrice)
-                return true;
-            return false;
+            if (startingPrice >= 0 && endingPrice >= 0)
+                if(startingPrice <= endingPrice)
+                    return true;
+                else
+                {
+                    Console.WriteLine("Please enter starting price less then ending price");
+                    return false;
+                }
+            else
+            {
+                Console.WriteLine("Please enter price more then 0");
+                return false;
+            }
+
         }
 
         public static (string, string) SetPriceRange(string startingPrice, string endingPrice)
@@ -277,7 +289,6 @@ namespace ManagerHelper
             bool isQuit = false;
 
             GetAvailableCars(cars);
-
 
             do
             {

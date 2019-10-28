@@ -3,6 +3,7 @@ using ManagerHelper;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace ManagerHelper.Tests
 {
@@ -123,7 +124,7 @@ namespace ManagerHelper.Tests
         }
 
         [TestMethod]
-        public void IIsColorValid_EnterIncorrectDataLetters_ReturnFalse()
+        public void IsColorValid_EnterIncorrectDataLetters_ReturnFalse()
         {
             Assert.IsFalse(Managerhelper.IsEngineSizeValid("ls"));
         }
@@ -322,18 +323,18 @@ namespace ManagerHelper.Tests
 
         #region//Tests for method SetSelectedTransmission
         [TestMethod]
-        public void SetSelectedTransmission_EnterCorrectEngineSize1_ReturnCarWithSetManualTransmission()
+        public void SetSelectedTransmission_EnterCorrectTransmission1_ReturnCarWithSetManualTransmission()
         {
             Car actual = new Car();
 
             car.SelectedTransmission = 1;
-            Managerhelper.SetSelectedEngineSize(actual, "1");
+            Managerhelper.SetSelectedTransmission(actual, "1");
 
             Assert.AreEqual(car.SelectedTransmission, actual.SelectedTransmission);
         }
 
         [TestMethod]
-        public void SetSelectedTransmission_EnterCorrectEngineSize2_ReturnCarWithSetAutomaticTransmission()
+        public void SetSelectedTransmission_EnterCorrectTransmission2_ReturnCarWithSetAutomaticTransmission()
         {
             Car actual = new Car();
 
@@ -344,12 +345,13 @@ namespace ManagerHelper.Tests
         }
 
         [TestMethod]
-        public void SetSelectedTransmission_EnterCorrectEngineSize3_ReturnCarWithSetCVTTransmission()
+        public void SetSelectedTransmission_EnterCorrectTransmission3_ReturnCarWithSetCVTTransmission()
+
         {
             Car actual = new Car();
 
             car.SelectedTransmission = 3;
-            Managerhelper.SetSelectedEngineSize(actual, "3");
+            Managerhelper.SetSelectedTransmission(actual, "3");
 
             Assert.AreEqual(car.SelectedTransmission, actual.SelectedTransmission);
         }
@@ -385,7 +387,7 @@ namespace ManagerHelper.Tests
         }
         #endregion
 
-        #region//Tests for method IsEngineSizeValid
+        #region//Tests for method IsPriceRangeValid
         [TestMethod]
         public void IsPriceRangeValid_EnterStartPriceLessThenEndPrice_ReturnTrue()
         {
@@ -401,8 +403,146 @@ namespace ManagerHelper.Tests
         #endregion
 
         #region//Tests for method SetPriceRange
+        [TestMethod]
+        public void SetPriceRange_InputStartPriceLessThenEndPrice_ReturnPrices()
+        {
+            string startingPrice = "4000";
+            string endingPrice = "5000";
 
+            var actual = Managerhelper.SetPriceRange("4000", "5000");
+
+            Assert.AreEqual((startingPrice, endingPrice), actual);
+        }
+
+        [TestMethod]
+        public void SetPriceRange_InputStartPriceMoreThenEndPrice_ReturnNulls()
+        {
+            string startingPrice = "4000";
+            string endingPrice = "3999";
+
+            var actual = Managerhelper.SetPriceRange(startingPrice, endingPrice);
+
+            Assert.AreEqual((null, null), actual);
+        }
+
+        [TestMethod]
+        public void SetPriceRange_InputIncorrectDataDot_ThrowFormatException()
+        {
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange(".", "1"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("1", "."));
+        }
+
+        [TestMethod]
+        public void SetPriceRange_InputIncorrectDataComma_TrowFormatException()
+        {
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange(",", "1"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("1", ","));
+        }
+
+        [TestMethod]
+        public void SetPriceRange_InputIncorrectDataEnter_TrowFormatException()
+        {
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("", "1"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("1", ""));
+        }
+
+        [TestMethod]
+        public void SetPriceRange_InputIncorrectDataSpace_TrowFormatException()
+        {
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange(" ", "1"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("1", " "));
+        }
+
+        [TestMethod]
+        public void SetPriceRange_InputIncorrectDataLetters_TrowFormatException()
+        {
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("ls", "1"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.SetPriceRange("1", "ls"));
+        }
         #endregion
 
+        #region//Tests for method GetCarsInPriceRange
+        [TestMethod]
+        public void GetCarsInPriceRange_CarCostIncludeInPriceRange_ReturnCarsInPriceRange()
+        {
+            string startingPrice = "-999999";
+            string endingPrice = "999999";
+
+            Managerhelper.GetAvailableCars(cars);
+            var actual = Managerhelper.GetCarsInPriceRange(cars, startingPrice, endingPrice);
+
+            Assert.IsNotNull(actual);
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_CarCostNotIncludeInPriceRange_ReturnNull()
+        {
+            string startingPrice = "0";
+            string endingPrice = "1";
+
+            Managerhelper.GetAvailableCars(cars);
+            var actual = Managerhelper.GetCarsInPriceRange(cars, startingPrice, endingPrice);
+
+            Assert.IsNull(actual);
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_StartingPriceMoreThenEndingPrice_ReturnNull()
+        {
+            string startingPrice = "999999";
+            string endingPrice = "0";
+
+            Managerhelper.GetAvailableCars(cars);
+            var actual = Managerhelper.GetCarsInPriceRange(cars, startingPrice, endingPrice);
+
+            Assert.IsNull(actual);
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputIncorrectDataDot_ThrowFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, ".", "999999"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "999999", "."));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputIncorrectDataComma_ThrowFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, ",", "999999"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "999999", ","));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputIncorrectDataEnter_ThrowFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "", "999999"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "999999", ""));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputIncorrectDataSpace_ThrowFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, " ", "999999"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "999999", " "));
+        }
+
+        [TestMethod]
+        public void GetCarsInPriceRange_InputIncorrectDataDLetters_ThrowFormatException()
+        {
+            Managerhelper.GetAvailableCars(cars);
+
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "ls", "999999"));
+            Assert.ThrowsException<FormatException>(() => Managerhelper.GetCarsInPriceRange(cars, "999999", "ls"));
+        }
+
+        #endregion
     }
 }
