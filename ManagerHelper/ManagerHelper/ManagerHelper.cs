@@ -78,26 +78,23 @@ namespace ManagerHelper
             }
         }
 
-        public static void CreateSelectedModel()
+        public static void CreateSelectedModel(string selectedModel)
         {
-            Console.WriteLine("Enter model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
-            string selectedModel = Console.ReadLine();
-
             if(IsModelValid(selectedModel))
             {
                 Console.WriteLine("Input engine size: 1 - 1.8, 2 - 2.0, 3 - 3.0");
                 string selectedEngineSize = Console.ReadLine();
 
-                if (IsEngineSizeValid(selectedEngineSize)) 
+                if (EngineSize.IsEngineSizeValid(selectedEngineSize)) 
                 {
                     Console.WriteLine("Input color: 1-Green, 2-Black, 3-Red, 4-Blue");
                     string selectedColor = Console.ReadLine();
 
-                    if (IsColorValid(selectedColor))
+                    if (Color.IsColorValid(selectedColor))
                     {
                         Console.WriteLine("Input transmission: 1-Manual, 2-Automatic, 3-CVT");
                         string selectedTransmission = Console.ReadLine();
-                        if (IsTransmissionValid(selectedTransmission))
+                        if (Transmission.IsTransmissionValid(selectedTransmission))
                         {
                             switch (selectedModel)
                             {
@@ -133,98 +130,16 @@ namespace ManagerHelper
                 return false;
             }
         }
-
-        public static bool IsEngineSizeValid(string selectedEngineSize)
-        {
-            if (selectedEngineSize == "1" || selectedEngineSize == "2" || selectedEngineSize == "3")
-                return true;
-            else
-            {
-                Console.WriteLine("Selected engine size is incorrect, try to input engine size: 1 - 1.8, 2 - 2.0, 3 - 3.0");
-                return false;
-            }
-        }
-        public static bool IsColorValid(string selectedColor)
-        {
-            if (selectedColor == "1" || selectedColor == "2" || selectedColor == "3" || selectedColor == "4")
-                return true;
-            else
-            {
-                Console.WriteLine("Selected color is incorrect, try to input color: 1-Green, 2-Black, 3-Red, 4-Blue");
-                return false;
-            }
-        }
-        public static bool IsTransmissionValid(string selectedTransmission)
-        {
-            if (selectedTransmission == "1" || selectedTransmission == "2" || selectedTransmission == "3")
-                return true;
-            else { 
-                Console.WriteLine("Selected transmission is incorrect, try to input transmission: 1-Manual, 2-Automatic, 3-CVT");
-            return false;}
-        }
+      
         public static void SetConfigurations(Car car, string selectedEngineSize, string selectedColor, string selectedTransmission)
         {
-            SetSelectedEngineSize(car, selectedEngineSize);
+            EngineSize.SetSelectedEngineSize(car, selectedEngineSize);
 
-            SetSelectedColor(car, selectedColor);
+            Color.SetSelectedColor(car, selectedColor);
 
-            SetSelectedTransmission(car, selectedTransmission);
+            Transmission.SetSelectedTransmission(car, selectedTransmission);
 
             DisplaySelectedCar(car);
-        }
-
-        public static Car SetSelectedEngineSize(Car car, string selectedEngineSize)
-        {
-            switch (selectedEngineSize)
-            {
-                case "1":
-                    car.EngineSize = 1.8;
-                    return car;
-                case "2":
-                    car.EngineSize = 2.0;
-                    return car;
-                case "3":
-                    car.EngineSize = 3.0;
-                    return car;
-            }
-            return null;
-        }
-
-        public static Car SetSelectedColor(Car car, string selectedColor)
-        {
-            switch (selectedColor)
-            {
-                case "1":
-                    car.Color = "Green";
-                    return car;
-                case "2":
-                    car.Color = "Black";
-                    return car;
-                case "3":
-                    car.Color = "Red";
-                    return car;
-                case "4":
-                    car.Color = "Blue";
-                    return car;
-            }
-            return null;
-        }
-
-        public static Car SetSelectedTransmission(Car car, string selectedTransmission)
-        {
-            switch (selectedTransmission)
-            {
-                case "1":
-                    car.SelectedTransmission = 1;
-                    return car;
-                case "2":
-                    car.SelectedTransmission = 2;
-                    return car;
-                case "3":
-                    car.SelectedTransmission = 3;
-                    return car;
-            }
-            return null;
         }
 
         public static void DisplaySelectedCar(Car car)
@@ -232,65 +147,9 @@ namespace ManagerHelper
             Console.WriteLine(car.CarInformation());
         }
 
-        public static List<Car> SortCarCost(List<Car> cars)
+        public static void SortCarCost(List<Car> cars)
         {
             cars.Sort((firstCar, nextCar) => firstCar.Cost.CompareTo(nextCar.Cost));
-            return cars;
-        }
-
-        public static bool IsPriceRangeValid(int startingPrice, int endingPrice)
-        {
-            if (startingPrice >= 0 && endingPrice >= 0)
-                if(startingPrice <= endingPrice)
-                    return true;
-                else
-                {
-                    Console.WriteLine("Please enter starting price less then ending price");
-                    return false;
-                }
-            else
-            {
-                Console.WriteLine("Please enter price more then 0");
-                return false;
-            }
-
-        }
-
-        public static (string, string) SetPriceRange(string startingPrice, string endingPrice)
-        {
-            int startingPriceToInt = Convert.ToInt32(startingPrice);
-            int endingPriceToInt = Convert.ToInt32(endingPrice);
-
-            if (IsPriceRangeValid(startingPriceToInt, endingPriceToInt))
-            {
-                return (startingPrice, endingPrice);
-            }
-
-            return (null, null);
-        }
-
-        public static List<Car> GetCarsInPriceRange(List<Car> cars, string startingPrice, string endingPrice)
-        {
-            int startingPriceToInt = Convert.ToInt32(startingPrice);
-            int endingPriceToInt = Convert.ToInt32(endingPrice);
-
-            List<Car> carsInPriceRange = new List<Car>();
-
-            foreach (Car car in cars)
-            {
-                if (car.Cost >= startingPriceToInt && car.Cost <= endingPriceToInt)
-                {
-                    carsInPriceRange.Add(car);
-                    return carsInPriceRange;
-                }
-            }
-
-            if (carsInPriceRange.Count == 0)
-            {
-                Console.WriteLine("In this range there are no available cars");
-            }
-
-            return null;
         }
 
         public static void DisplayCarsInformation(List<Car> cars)
@@ -335,7 +194,10 @@ namespace ManagerHelper
                     case "2":
                         Console.Clear();
 
-                        CreateSelectedModel();
+                        Console.WriteLine("Enter model: 1 - LandCruiser, 2 - Camry, 3 - Corolla");
+                        string selectedModel = Console.ReadLine();
+
+                        CreateSelectedModel(selectedModel);
 
                         Console.WriteLine("\n\n\nFor return to menu press any key");
                         Console.ReadKey();
@@ -364,8 +226,8 @@ namespace ManagerHelper
                             Console.WriteLine("to ");
                             string endingPrice = Console.ReadLine();
 
-                            SetPriceRange(startingPrice, endingPrice);
-                            GetCarsInPriceRange(cars, startingPrice, endingPrice);
+                            PriceRange.SetPriceRange(startingPrice, endingPrice);
+                            PriceRange.GetCarsInPriceRange(cars, startingPrice, endingPrice);
                         }
                         catch (FormatException)
                         {

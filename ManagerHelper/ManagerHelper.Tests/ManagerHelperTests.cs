@@ -266,13 +266,13 @@ namespace ManagerHelper.Tests
         [TestMethod]
         public void SetSelectedEngineSize_EnterIncorrectDataDot_IsEqualNull()
         {
-            Assert.AreEqual(null, Managerhelper.SetSelectedEngineSize(new Car(), "."));
+            Assert.AreEqual(0, Managerhelper.SetSelectedEngineSize(new Car(), "."));
         }
 
         [TestMethod]
         public void SetSelectedEngineSize_EnterIncorrectDataComma_IsEqualNull()
         {
-            Assert.AreEqual(null, Managerhelper.SetSelectedEngineSize(new Car(), ","));
+            Assert.AreEqual(0, Managerhelper.SetSelectedEngineSize(new Car(), ","));
         }
 
         [TestMethod]
