@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ManagerHelper.Tests.Properties {
+namespace ToyotaManagerHelper.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ManagerHelper.Tests.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ManagerHelper.Tests.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ToyotaManagerHelper.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,18 +61,18 @@ namespace ManagerHelper.Tests.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на LandCruiser 1.8 Blue Manual
-        ///LandCruiser 2.0 Blue Manual
-        ///LandCruiser 2.0 Green CVT
-        ///LandCruiser 3.0 Green Automatic
-        ///Camry 1.8 Green Automatic
-        ///Camry 2.0 Black Automatic
-        ///Camry 2.0 Black CVT
-        ///Corolla 1.8 Black CVT
-        ///Corolla 2.0 Red CVT
-        ///Corolla 2.0 Red Manual
-        ///Corolla 2.0 Blue Automatic
-        ///Corolla 2.0 Black CVT.
+        ///   Ищет локализованную строку, похожую на LandCruiser 1,8 Blue Manual
+        ///LandCruiser 2,0 Blue Manual
+        ///LandCruiser 2,0 Green CVT
+        ///LandCruiser 3,0 Green Automatic
+        ///Camry 1,8 Green Automatic
+        ///Camry 2,0 Black Automatic
+        ///Camry 2,0 Black CVT
+        ///Corolla 1,8 Black CVT
+        ///Corolla 2,0 Red CVT
+        ///Corolla 2,0 Red Manual
+        ///Corolla 2,0 Blue Automatic
+        ///Corolla 2,0 Black CVT.
         /// </summary>
         public static string CarsAvailable {
             get {
