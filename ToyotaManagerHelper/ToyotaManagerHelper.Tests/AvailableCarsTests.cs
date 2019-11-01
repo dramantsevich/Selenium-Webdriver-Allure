@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
-using ToyotaManagerHelper.Cars;
+using ToyotaManagerHelper.Builder;
 
 namespace ToyotaManagerHelper.Tests
 {
