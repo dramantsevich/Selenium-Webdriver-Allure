@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Threading;
@@ -11,6 +10,15 @@ namespace TestGmailViaSelenium
 {
     public class GmailTests
     {
+        public static DefaultWait<IWebDriver> GetFluentWait(IWebDriver driver)
+        {
+            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
+            fluentWait.Timeout = TimeSpan.FromSeconds(30);
+            fluentWait.PollingInterval = TimeSpan.FromSeconds(5);
+            fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+            return fluentWait;
+        }
+
         private IWebDriver driver;
         private string webSiteUrl;
 
@@ -37,38 +45,27 @@ namespace TestGmailViaSelenium
             passwordNext.Click();
         }
 
-        public static DefaultWait<IWebDriver> GetFluentWait(IWebDriver driver)
-        {
-            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
-            fluentWait.Timeout = TimeSpan.FromSeconds(25);
-            fluentWait.PollingInterval = TimeSpan.FromMilliseconds(1700);
-            fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
-            return fluentWait;
-        }
-
         [Test]
         public void ButtonSearh_FoundMessage()
         {
-            Thread.Sleep(3000);
             DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
 
-            IWebElement searchInMailField = driver.FindElement(By.Name("q"));
+            IWebElement searchInMailField = fluentWait.Until(x => x.FindElement(By.XPath("//input[@placeholder='Поиск в почте']")));
             searchInMailField.SendKeys("Xinuos");
 
-            IWebElement searchInMailButton = fluentWait.Until(x => x.FindElement(By.CssSelector(".gb_mf")));
+            IWebElement searchInMailButton = fluentWait.Until(x => x.FindElement(By.XPath("//button[@class='gb_of gb_pf']")));
             searchInMailButton.Click();
 
-            IWebElement foundMessage = fluentWait.Until(x => x.FindElement(By.Name("Xinuos")));
+            IWebElement foundMessage = fluentWait.Until(x => x.FindElement(By.Name("Xinuos Inc.")));
             Assert.IsNotNull(foundMessage);
         }
 
-        [Test]
-        public void WriteMessage()
+        [Test, Order(1)]
+        public void WriteMessage_ExistNewMessageFromMe()
         {
-            Thread.Sleep(3000);
             DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
 
-            IWebElement writeMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='z0']/div[1]")));
+            IWebElement writeMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='T-I J-J5-Ji T-I-KE L3']")));
             writeMessageButton.Click();
 
             IWebElement writeTo = fluentWait.Until(x => x.FindElement(By.Name("to")));
@@ -81,14 +78,134 @@ namespace TestGmailViaSelenium
             messageBody.SendKeys("qwerty");
             messageBody.SendKeys(Keys.Control + Keys.Enter);
 
-            IWebElement foundMessage = fluentWait.Until(x => x.FindElement(By.Name("я")));
-            Assert.IsNotNull(foundMessage);
+            IWebElement foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Theme1')]")));
+
+            Assert.IsNotNull(fluentWait.Until(foundMessage => foundMessage));
         }
-        private bool IsElementPresent(By by)
+
+        [Test, Order(2)]
+        public void DeleteMessage_DeleteMessageWithTheme1()
         {
+            DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
+
+            IWebElement foundMessage;
+            IWebElement deleteMessageButton;
+            IWebElement selectFoundMessage;
+
             try
             {
-                driver.FindElement(by);
+                if (IsElementPresent(By.Name("я")))
+                {
+                    foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Theme1')]")));
+
+                    List<IWebElement> listDeleteMessageButtons = new List<IWebElement>();
+
+                    selectFoundMessage = fluentWait.Until(x => x.FindElement(By.XPath("/html[1]/body[1]/div[7]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[6]/div[1]/div[1]/div[3]/div[1]/table[1]/tbody[1]/tr[1]/td[2]/div[1]")));
+                    selectFoundMessage.Click();
+
+                    deleteMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='bq4 xY']//ul//li[@class='bqX bru']")));
+                    listDeleteMessageButtons.Add(deleteMessageButton);
+                    Thread.Sleep(3000);
+                    listDeleteMessageButtons[0].Click();
+
+                    foundMessage = null;
+
+                    Assert.IsNull(foundMessage);
+                }
+                else
+                {
+                    Assert.Fail("Fail");
+                }
+            }
+            catch (OpenQA.Selenium.NoSuchElementException)
+            {
+                Console.WriteLine("NoSuchElementException");
+            }
+        }
+
+        [Test]
+        public void QuitFromAccount()
+        {
+            Thread.Sleep(2000);
+            DefaultWait<IWebDriver> fluentWait = new DefaultWait<IWebDriver>(driver);
+
+            IWebElement account = fluentWait.Until(x => x.FindElement(By.XPath("//a[@class='gb_D gb_Fa gb_i']")));
+            account.Click();
+
+            IWebElement logOutFromAccount = fluentWait.Until(x => x.FindElement(By.XPath("//a[@id='gb_71']")));
+            logOutFromAccount.Click();
+            Thread.Sleep(3000);
+
+            string currentURL = "https://accounts.google.com/ServiceLogin/signinchooser?service=mail&passive=true&rm=false&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ss=1&scc=1&ltmpl=default&ltmplcache=2&emr=1&osid=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin";
+
+            Assert.IsTrue(currentURL == driver.Url);
+        }
+
+        [Test]
+        public void AttachFile()
+        {
+            IWebElement writeMessageButton;
+            IWebElement writeTo;
+            IWebElement theme;
+            IWebElement attachFile;
+
+            DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
+
+            writeMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='T-I J-J5-Ji T-I-KE L3']")));
+            writeMessageButton.Click();
+
+            writeTo = fluentWait.Until(x => x.FindElement(By.Name("to")));
+            writeTo.SendKeys("d.ramantsevich@gmail.com");
+
+            theme = fluentWait.Until(x => x.FindElement(By.Name("subjectbox")));
+            theme.SendKeys("Theme1");
+
+            attachFile = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='bAK']/div[1]/div[1]")));
+            attachFile.Click();
+        }
+
+        //[Test]
+        //public void SentEmptyMessage()
+        //{
+        //    DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
+
+        //    IWebElement writeMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='T-I J-J5-Ji T-I-KE L3']")));
+        //    writeMessageButton.Click();
+
+        //    IWebElement getButtonCloseSentMessageForm = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='nH Hd']")));
+        //    driver.SwitchTo().Frame(getButtonCloseSentMessageForm);
+        //    Console.WriteLine(driver.SwitchTo().Frame(getButtonCloseSentMessageForm));
+
+        //    IWebElement messageBody = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
+        //    messageBody.SendKeys(Keys.Control + Keys.Enter);
+
+        //    IWebElement getFormWithButtonOK = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='Kj-JD']")));
+        //    driver.SwitchTo().Frame(getFormWithButtonOK);
+        //    Console.WriteLine(driver.SwitchTo().Frame(getFormWithButtonOK));
+
+        //    if (IsElementPresent(By.XPath("//span[contains(text(),'Ошибка')]")))
+        //    {
+
+        //        IWebElement buttonOK = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='Kj-JD-Jl']/button[@name='ok']")));
+        //        buttonOK.Click();
+
+        //        IWebElement bodyMessage = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
+        //        bodyMessage.SendKeys(Keys.Escape);
+
+
+        //        //Assert.Null();
+        //        //&& driver.SwitchTo().Frame(getButtonCloseSentMessageForm)
+        //        //driver.SwitchTo().Frame("xpcpeersIFL");
+        //    }
+        //}
+
+        private bool IsElementPresent(By by)
+        {
+            DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
+
+            try
+            {
+                fluentWait.Until(x => x.FindElement(by));
                 return true;
             }
             catch (NoSuchElementException)
@@ -97,56 +214,10 @@ namespace TestGmailViaSelenium
             }
         }
 
-        [Test]
-        public void DeleteMessage()
-        {
-            DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
-
-            IWebElement foundMessage;
-            IWebElement deleteMessageButton;
-            IWebElement selectFoundMessage;
-
-            //span[@data-hovercard-owner-id='132']
-
-            if (IsElementPresent(By.XPath(".//*[text()='das']/")))
-            {
-                foundMessage = fluentWait.Until(x => x.FindElement(By.Name("я")));
-
-                if (foundMessage.GetAttribute("name") == "я")
-                {
-                    Console.WriteLine("EXIST");
-
-                    selectFoundMessage = fluentWait.Until(x => x.FindElement(By.XPath("/html[1]/body[1]/div[7]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[6]/div[1]/div[1]/div[3]/div[1]/table[1]/tbody[1]/tr[1]/td[2]/div[1]")));
-                    selectFoundMessage.Click();
-
-                    deleteMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//ul[@id=':2w']//li[@class='bqX bru']")));
-                    deleteMessageButton.Click();
-
-                    foundMessage = null;
-
-                    Assert.IsNull(foundMessage);
-                }
-                else { 
-                    Console.WriteLine("fail"); 
-                }
-            }
-            else
-            {
-                Assert.Fail("fail");
-            }
-        }
-
-        [Test]
-        public void QuitFromAccount()
-        {
-            Thread.Sleep(3000);
-            driver.FindElement(By.CssSelector(".gb_xa")).Click();
-            driver.FindElement(By.CssSelector("#gb_71")).Click();
-        }
-
         [TearDown]
         public void TearDown()
         {
+            Thread.Sleep(2000);
             //driver.Close();
         }
     }
