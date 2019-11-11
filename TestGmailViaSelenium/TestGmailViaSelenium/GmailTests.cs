@@ -84,7 +84,7 @@ namespace TestGmailViaSelenium
             Assert.IsNotNull(fluentWait.Until(foundMessage => foundMessage));
         }
 
-        [Test]
+        [Test, Order(4)]
         public void DeleteMessage_DeleteMessageWithTheme1()
         {
             DefaultWait<IWebDriver> fluentWait = GetFluentWait(driver);
@@ -212,9 +212,10 @@ namespace TestGmailViaSelenium
             messageBody.SendKeys("Send file with incorrect extension");
             messageBody.SendKeys(Keys.Control + Keys.Enter);
 
-            Thread.Sleep(10000);
-
             IAlert alert = driver.SwitchTo().Alert();
+
+            Thread.Sleep(15000);
+
             alert.Accept();
 
             foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Send file with incorrect extension')]")));
