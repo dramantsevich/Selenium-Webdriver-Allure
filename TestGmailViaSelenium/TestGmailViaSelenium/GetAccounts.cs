@@ -8,10 +8,9 @@ namespace TestGmailViaSelenium
     {
         static public void GetAccount(List<string> emails, List<string> passwords)
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
             try
             {
-                using (StreamReader sr = new StreamReader($@"{path}\Account.txt"))
+                using (StreamReader sr = new StreamReader($@"../../../Account.txt"))
                 {
                     string line;
 

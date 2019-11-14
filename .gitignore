@@ -16,7 +16,3 @@ x86/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
-
-# But not this files
-!*/[Bb]in/[Dd]ebug/[Nn]etcoreapp3.0/Account.txt
-!*/[Bb]in/[Dd]ebug/[Nn]etcoreapp3.0/iTechArt.7z

@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 namespace TestGmailViaSelenium
@@ -52,26 +53,36 @@ namespace TestGmailViaSelenium
             Assert.IsNotNull(foundMessage);
         }
 
-        [TestCase(@"\AttachFile.txt")]
-        public void SentMessageWithAttachedFile_SentCorrectFileExtension(string fileName)
+        [Test]
+        public void SentMessageWithAttachedFile_SentCorrectFileExtension()
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
+            string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            string fileCurrentPath = @"..\..\..\Account.txt";
+
+            string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
+
             fluentWait = FluentWait.GetFluentWait(chromeDriver);
 
-            gmailActions.SentMessageWithAttachedFile(this.currentEmail, $@"{path}{fileName}");
+            gmailActions.SentMessageWithAttachedFile(this.currentEmail, path);
 
-            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'AttachFile.txt')]")));
+            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Account.txt')]")));
 
             Assert.IsNotNull(foundMessage);
         }
 
-        [TestCase(@"\iTechArt.7z")]
-        public void SentMessageWithAttachedFile_SentIncorrectFileExtension(string fileName)
+        [Test]
+        public void SentMessageWithAttachedFile_SentIncorrectFileExtension()
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory.ToString();
+            string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            string fileCurrentPath = @"..\..\..\iTechArt.7z";
+
+            string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
+
             fluentWait = FluentWait.GetFluentWait(chromeDriver);
 
-            gmailActions.SentMessageWithAttachedFile(this.currentEmail, $@"{path}{fileName}");
+            gmailActions.SentMessageWithAttachedFile(this.currentEmail, path);
 
             IAlert alert = fluentWait.Until(ExpectedConditions.AlertIsPresent());
             alert.Accept();
