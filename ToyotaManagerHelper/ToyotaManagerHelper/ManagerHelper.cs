@@ -1,6 +1,7 @@
 ﻿using System;
 using ToyotaManagerHelper.Builder;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ToyotaManagerHelper
 {
@@ -16,7 +17,7 @@ namespace ToyotaManagerHelper
             ToyotaShowRoom toyotaShowRoomController = new ToyotaShowRoom(listOfCars);
 
             do {
-                Console.Clear();
+                //Console.Clear();
 
                 Console.WriteLine("1 - to view information about cars\n" +
                 "2 - to calculate the cost of the car depending on the selected configuration\n" +

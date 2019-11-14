@@ -9,7 +9,7 @@ namespace ToyotaManagerHelper
         public static void GetAvailableCars(List<Car> cars)
         {
             string path = @"..\..\..\Resources\CarsAvailable.txt";
-
+            
             using (StreamReader textStreamReader = new StreamReader(path))
             {
                 string line;
