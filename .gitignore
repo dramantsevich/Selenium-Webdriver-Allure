@@ -12,9 +12,6 @@ x86/
 .vs/
 
 
-# NUnit
-*.VisualState.xml
-TestResult.xml
-nunit-*.xml
+
 
 
