@@ -81,6 +81,7 @@ namespace TestGmailViaSelenium
             passwordNextButton = fluentWait.Until(x => x.FindElement(By.Id("passwordNext")));
             passwordNextButton.Click();
         }
+
         public void QuitFromAccount()
         {
             IWebElement account;
@@ -144,32 +145,47 @@ namespace TestGmailViaSelenium
             theme.SendKeys(themeOfMessage);
         }
 
-        public void SentMessage(string email, string themeOfMessage)
+        public void SetMessageBody(string messageBody)
         {
+            IWebElement body;
+
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            OpenNewMessageForm();
-            SetRecipientOfMessage(email);
-            SetThemeOfMessage(themeOfMessage);
-
-            messageBody = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
-            messageBody.SendKeys("qwerty");
-            messageBody.SendKeys(Keys.Control + Keys.Enter);
+            body = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
+            body.SendKeys(messageBody);
         }
 
-        public void SentMessageWithAttachedFile(string email, string themeOfMessage, string pathFile)
+        public void SentMessageButton()
+        {
+            this.messageBody = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
+            this.messageBody.SendKeys(Keys.Control + Keys.Enter);
+        }
+
+        public void SentMessage(string email, string themeOfMessage,string messageBody)
         {
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             OpenNewMessageForm();
             SetRecipientOfMessage(email);
             SetThemeOfMessage(themeOfMessage);
+            SetMessageBody(messageBody);
+
+            SentMessageButton();
+        }
+
+        public void SentMessageWithAttachedFile(string email, string themeOfMessage, string messageBody, string pathFile)
+        {
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
+
+            OpenNewMessageForm();
+            SetRecipientOfMessage(email);
+            SetThemeOfMessage(themeOfMessage);
+            SetMessageBody(messageBody);
 
             attachFile = fluentWait.Until(x => x.FindElement(By.XPath("//input[@name='Filedata']")));
             attachFile.SendKeys(pathFile);
 
-            messageBody = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
-            messageBody.SendKeys(Keys.Control + Keys.Enter);
+            SentMessageButton();
         }
 
         public void SentEmptyMessageForm()
@@ -178,8 +194,7 @@ namespace TestGmailViaSelenium
 
             OpenNewMessageForm();
 
-            messageBody = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
-            messageBody.SendKeys(Keys.Control + Keys.Enter);
+            SentMessageButton();
         }
 
         public void DeleteSentMessagesFrom(string email)
