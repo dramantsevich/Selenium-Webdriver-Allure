@@ -4,13 +4,15 @@ using System.IO;
 
 namespace TestGmailViaSelenium
 {
-    static class GetAccounts
+    static class Account
     {
-        static public void GetAccount(List<string> emails, List<string> passwords)
+        static public Dictionary<string, string> GetAccounts(string path)
         {
+            Dictionary<string, string> accounts = new Dictionary<string, string>();
+
             try
             {
-                using (StreamReader sr = new StreamReader($@"../../../Account.txt"))
+                using (StreamReader sr = new StreamReader(path))
                 {
                     string line;
 
@@ -18,18 +20,16 @@ namespace TestGmailViaSelenium
                     {
                         string[] words = line.Split(new char[] { ' ' });
 
-                        string email = words[1];
-                        string password = words[3];
-
-                        emails.Add(email);
-                        passwords.Add(password);
+                        accounts.Add(words[1], words[3]);
                     }
                 }
+                return accounts;
             }
             catch (Exception e)
             {
                 Console.WriteLine("The file could not be read:");
                 Console.WriteLine(e.Message);
+                return null;
             }
         }
     }

@@ -3,7 +3,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -12,43 +11,37 @@ namespace TestGmailViaSelenium
     class GmailMessagesTests
     {
         private IWebElement foundMessage;
-        private IWebDriver chromeDriver;
-        private GmailActionsController gmailActions;
+        private IWebDriver currentDriver;
+        private GmailActionsController gmailController;
         DefaultWait<IWebDriver> fluentWait;
-        private string currentEmail;
-        private string currentPassword;
-
-        public GmailActionsController ChromeDriver(GmailActionsController gmailActions, IWebDriver chromeDriver)
-        {
-            gmailActions = new GmailActionsController(chromeDriver);
-            this.gmailActions = gmailActions;
-            return this.gmailActions;
-        }
+        string firstMail;
+        string firstPassword;
+        string themeOfMessage;
 
         [SetUp]
         public void SetUp()
         {
-            List<string> emails = new List<string>();
-            List<string> passwords = new List<string>();
-            this.chromeDriver = new ChromeDriver();
 
-            GetAccounts.GetAccount(emails, passwords);
+            this.currentDriver = new ChromeDriver();
 
-            this.currentEmail = emails[0];
-            this.currentPassword = passwords[0];
+            this.gmailController = new GmailActionsController(this.currentDriver);
 
-            ChromeDriver(gmailActions, this.chromeDriver);
-            gmailActions.StartGmail(this.currentEmail, this.currentPassword);
+            this.firstMail = gmailController.SetFirstMail();
+            this.firstPassword = gmailController.SetFirstPassword();
+
+            gmailController.StartGmail(firstMail, firstPassword);
         }
 
         [Test]
         public void SentMessage()
         {
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            themeOfMessage = "SentMessage";
+              
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailActions.SentMessage(this.currentEmail);
+            gmailController.SentMessage(this.firstMail, themeOfMessage);
 
-            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Theme1')]")));
+            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath($"//span[contains(text(),'{themeOfMessage}')]")));
 
             Assert.IsNotNull(foundMessage);
         }
@@ -56,17 +49,17 @@ namespace TestGmailViaSelenium
         [Test]
         public void SentMessageWithAttachedFile_SentCorrectFileExtension()
         {
+            themeOfMessage = "Message with attached file";
+            string fileName = "Account.txt";
             string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-
-            string fileCurrentPath = @"..\..\..\Account.txt";
-
+            string fileCurrentPath = $@"..\..\..\{fileName}";
             string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
 
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailActions.SentMessageWithAttachedFile(this.currentEmail, path);
+            gmailController.SentMessageWithAttachedFile(this.firstMail, themeOfMessage, path);
 
-            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Account.txt')]")));
+            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath($"//span[contains(text(),'{fileName}')]")));
 
             Assert.IsNotNull(foundMessage);
         }
@@ -74,55 +67,62 @@ namespace TestGmailViaSelenium
         [Test]
         public void SentMessageWithAttachedFile_SentIncorrectFileExtension()
         {
+            themeOfMessage = "Message with incorrect file extension";
+            string fileName = "iTechArt.7z";
             string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-
-            string fileCurrentPath = @"..\..\..\iTechArt.7z";
-
+            string fileCurrentPath = $@"..\..\..\{fileName}";
             string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
 
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailActions.SentMessageWithAttachedFile(this.currentEmail, path);
+            gmailController.SentMessageWithAttachedFile(this.firstMail, themeOfMessage, path);
 
             IAlert alert = fluentWait.Until(ExpectedConditions.AlertIsPresent());
             alert.Accept();
 
-            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[@class='y2']/span[contains(text(),'')]")));
+            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath($"//span[contains(text(),'{themeOfMessage}')]")));
 
             Assert.IsNotNull(foundMessage);
         }
 
         [Test]
-        public void SentEmptyMessageForm_IsDisplayedErrorPopUpWindow()
+        public void SentEmptyMessageForm_IsDisplayedErrorWindow()
         {
             IWebElement errorForm;
 
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailActions.SentEmptyMessageForm();
+            gmailController.SentEmptyMessageForm();
 
-            errorForm = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='Kj-JD-K7 Kj-JD-K7-bsT']")));
-
+            errorForm = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='Kj-JD-K7 Kj-JD-K7-bsT']")));
+            
             Assert.IsTrue(errorForm.Displayed);
         }
 
         [Test]
-        public void DeleteMessageFrom_DeleteAllMessagesFromGivenEmail()
+        public void DeleteSentMessagesFrom_DeleteAllMessagesFromGivenEmail()
         {
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailActions.DeleteSentMessagesFrom(this.currentEmail);
+            try
+            {
+                gmailController.DeleteSentMessagesFrom(this.firstMail);
 
-            bool isFoundMessage = gmailActions.IsElementPresent(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.currentEmail}']"));
+                bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
 
-            Assert.IsTrue(isFoundMessage);
+                Thread.Sleep(1000);
+                Assert.IsTrue(isFoundMessage);
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e.Message == "The operation has timed out.");
+            }
         }
 
         [TearDown]
         public void TearDown()
         {
-            Thread.Sleep(2000);
-            gmailActions.CloseGmail();
+            gmailController.CloseGmail();
         }
     }
 }

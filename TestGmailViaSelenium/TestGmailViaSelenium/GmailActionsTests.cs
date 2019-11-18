@@ -2,80 +2,66 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace TestGmailViaSelenium
 {
     public class GmailActionsTests
     {
         private IWebElement foundMessage;
-        private IWebDriver chromeDriver;
-        private GmailActionsController gmailActions;
+        private IWebDriver currentDriver;
+        private GmailActionsController gmailController;
         DefaultWait<IWebDriver> fluentWait;
-        private string currentEmail;
-        private string currentPassword;
-
-        public GmailActionsController ChromeDriver(GmailActionsController gmailActions, IWebDriver chromeDriver)
-        {
-            gmailActions = new GmailActionsController(chromeDriver);
-            this.gmailActions = gmailActions;
-            return this.gmailActions;
-        }
 
         [SetUp]
         public void SetUp()
         {
-            List<string> emails = new List<string>();
-            List<string> passwords = new List<string>();
-            this.chromeDriver = new ChromeDriver();
+            this.currentDriver = new ChromeDriver();
 
-            GetAccounts.GetAccount(emails, passwords);
+            this.gmailController = new GmailActionsController(this.currentDriver);
 
-            this.currentEmail = emails[0];
-            this.currentPassword = passwords[0];
+            string firstMail = gmailController.SetFirstMail();
+            string firstPassword = gmailController.SetFirstPassword();
 
-            ChromeDriver(gmailActions, this.chromeDriver);
-            gmailActions.StartGmail(this.currentEmail, this.currentPassword);
+            gmailController.StartGmail(firstMail,firstPassword);
         }
 
         [Test]
-        public void StartGmail_LogInGmail()
+        public void StartGmail_LogIn()
         {
-            //in method SetUp use method startGmail
-            IWebElement account;
-            IWebElement accountAddres;
+            IWebElement accountButton;
+            IWebElement currentAccountMailOnPage;
+            string currentMail = gmailController.SetFirstMail();
 
-            fluentWait = FluentWait.GetFluentWait(this.chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            account = fluentWait.Until(x => x.FindElement(By.XPath("//a[@class='gb_D gb_Fa gb_i']")));
-            account.Click();
+            accountButton = fluentWait.Until(x => x.FindElement(By.XPath("//a[@class='gb_D gb_Fa gb_i']")));
+            accountButton.Click();
 
-            accountAddres = fluentWait.Until(x => x.FindElement(By.XPath($"//div[contains(text(), '{this.currentEmail}')]")));
+            currentAccountMailOnPage = fluentWait.Until(x => x.FindElement(By.XPath($"//div[@class='gb_jb']")));
 
-            Assert.IsTrue(accountAddres.Displayed);
+            Assert.IsTrue(currentAccountMailOnPage.Text == currentMail);
         }
 
         [Test]
         public void QuitFromAccount()
         {
-            fluentWait = FluentWait.GetFluentWait(this.chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
             
             string currentURL = "https://accounts.google.com/ServiceLogin/signinchooser?service=mail&passive=true&rm=false&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ss=1&scc=1&ltmpl=default&ltmplcache=2&emr=1&osid=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin";
 
-            gmailActions.QuitFromAccount();
+            gmailController.QuitFromAccount();
 
-            bool actualResult = fluentWait.Until(ExpectedConditions.UrlContains(currentURL));
+            bool isUrlContainsCurrentUrl = fluentWait.Until(ExpectedConditions.UrlContains(currentURL));
 
-            Assert.IsTrue(actualResult);
+            Assert.IsTrue(isUrlContainsCurrentUrl);
         }
 
         [Test]
         public void ButtonSearch_FoundMessage()
         {
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            fluentWait = FluentWait.GetFluentWait(currentDriver);
 
-            gmailActions.ButtonSearch();
+            gmailController.ButtonSearch();
 
             foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Xinuos Inc.')]")));
             Assert.IsNotNull(foundMessage);
@@ -84,25 +70,24 @@ namespace TestGmailViaSelenium
         [Test]
         public void GetAddOns_IsVisible()
         {
-            IWebElement newFrame;
-            IWebElement titleOfNewFrame;
-            fluentWait = FluentWait.GetFluentWait(chromeDriver);
+            IWebElement addOnsFrame;
+            IWebElement addOnsFrameTitle;
+            fluentWait = FluentWait.GetFluentWait(currentDriver);
 
-            gmailActions.GetAddOns();
+            gmailController.GetAddOns();
 
-            newFrame = fluentWait.Until(x => x.FindElement(By.XPath("//div[@id='glass-content']/iframe")));
-            chromeDriver.SwitchTo().Frame(newFrame);
+            addOnsFrame = fluentWait.Until(x => x.FindElement(By.XPath("//div[@id='glass-content']/iframe")));
+            currentDriver.SwitchTo().Frame(addOnsFrame);
 
-            titleOfNewFrame = fluentWait.Until(x => x.FindElement(By.XPath("//span[@class='yQsxXc']")));
+            addOnsFrameTitle = fluentWait.Until(x => x.FindElement(By.XPath("//span[@class='yQsxXc']")));
 
-            Assert.IsTrue(titleOfNewFrame.Displayed);
+            Assert.IsTrue(addOnsFrameTitle.Displayed);
         }
 
         [TearDown]
         public void TearDown()
         {
-            Thread.Sleep(2000);
-            gmailActions.CloseGmail();
+            gmailController.CloseGmail();
         }
     }
 }
