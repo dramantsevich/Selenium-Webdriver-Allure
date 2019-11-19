@@ -9,7 +9,7 @@ namespace TestGmailViaSelenium
     {
         private IWebElement foundMessage;
         private IWebDriver currentDriver;
-        private GmailActionsController gmailController;
+        private GmailController gmailController;
         DefaultWait<IWebDriver> fluentWait;
 
         [SetUp]
@@ -17,7 +17,7 @@ namespace TestGmailViaSelenium
         {
             this.currentDriver = new ChromeDriver();
 
-            this.gmailController = new GmailActionsController(this.currentDriver);
+            this.gmailController = new GmailController(this.currentDriver);
 
             string firstMail = gmailController.SetFirstMail();
             string firstPassword = gmailController.SetFirstPassword();
@@ -59,11 +59,14 @@ namespace TestGmailViaSelenium
         [Test]
         public void ButtonSearch_FoundMessage()
         {
+            string themeOfMessage = "Xinuos";
+
             fluentWait = FluentWait.GetFluentWait(currentDriver);
 
-            gmailController.ButtonSearch();
+            gmailController.SerachMessageByTheme(themeOfMessage);
 
-            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath("//span[contains(text(),'Xinuos Inc.')]")));
+            foundMessage = fluentWait.Until(ExpectedConditions.ElementExists(By.XPath("//span[contains(text(),'Xinuos Inc.')]")));
+
             Assert.IsNotNull(foundMessage);
         }
 

@@ -2,12 +2,13 @@
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
 namespace TestGmailViaSelenium
 {
-    public class GmailActionsController
+    public class GmailController
     {
         private IWebDriver currentDriver;
         DefaultWait<IWebDriver> fluentWait;
@@ -21,7 +22,7 @@ namespace TestGmailViaSelenium
             return this.currentDriver;
         }
 
-        public GmailActionsController(IWebDriver driver)
+        public GmailController(IWebDriver driver)
         {
             SetDriver(driver);
         }
@@ -69,16 +70,16 @@ namespace TestGmailViaSelenium
 
             this.currentDriver.Navigate().GoToUrl(webSiteUrl);
 
-            emailField = fluentWait.Until(x => x.FindElement(By.Name("identifier")));
+            emailField = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Name("identifier")));
             emailField.SendKeys(mail);
 
-            emailNextButton = fluentWait.Until(x => x.FindElement(By.Id("identifierNext")));
+            emailNextButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierNext")));
             emailNextButton.Click();
 
-            passwordField = fluentWait.Until(x => x.FindElement(By.Name("password")));
+            passwordField = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
             passwordField.SendKeys(password);
 
-            passwordNextButton = fluentWait.Until(x => x.FindElement(By.Id("passwordNext")));
+            passwordNextButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("passwordNext")));
             passwordNextButton.Click();
         }
 
@@ -96,16 +97,16 @@ namespace TestGmailViaSelenium
             logOutFromAccount.Click();
         }
 
-        public void ButtonSearch()
+        public void SerachMessageByTheme(string themeOfMessage)
         {
             IWebElement searchInMailField;
             IWebElement searchButton;
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             searchInMailField = fluentWait.Until(x => x.FindElement(By.XPath("//input[@placeholder='Search mail']")));
-            searchInMailField.SendKeys("Xinuos");
+            searchInMailField.SendKeys(themeOfMessage);
 
-            searchButton = fluentWait.Until(x => x.FindElement(By.XPath("//button[@aria-label='Search Mail']")));
+            searchButton = fluentWait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[@aria-label='Search Mail']")));
             searchButton.Click();
         }
 
@@ -261,6 +262,15 @@ namespace TestGmailViaSelenium
         public void CloseGmail()
         {
             this.currentDriver.Close();
+        }
+
+        public string GetFilePath(string fileName)
+        {
+            string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string fileCurrentPath = $@"..\..\..\{fileName}";
+            string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
+
+            return path;
         }
 
         public bool IsElementPresent(By by)

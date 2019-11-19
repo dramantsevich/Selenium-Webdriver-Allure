@@ -4,7 +4,6 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.IO;
-using System.Threading;
 
 namespace TestGmailViaSelenium
 {
@@ -12,7 +11,7 @@ namespace TestGmailViaSelenium
     {
         private IWebElement foundMessage;
         private IWebDriver currentDriver;
-        private GmailActionsController gmailController;
+        private GmailController gmailController;
         DefaultWait<IWebDriver> fluentWait;
         string firstMail;
         string firstPassword;
@@ -25,7 +24,7 @@ namespace TestGmailViaSelenium
 
             this.currentDriver = new ChromeDriver();
 
-            this.gmailController = new GmailActionsController(this.currentDriver);
+            this.gmailController = new GmailController(this.currentDriver);
 
             this.firstMail = gmailController.SetFirstMail();
             this.firstPassword = gmailController.SetFirstPassword();
@@ -36,9 +35,8 @@ namespace TestGmailViaSelenium
         [Test]
         public void SentMessage()
         {
-            themeOfMessage = "SentMessage";
+            themeOfMessage = "Test method SentMessage";
             messageBody = "sent a message to the method being tested SentMessage()";
-
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
@@ -55,15 +53,13 @@ namespace TestGmailViaSelenium
             themeOfMessage = "Message with attached file";
             messageBody = "sent a message to the method being tested SentMessageWithAttachedFile()";
             string fileName = "Account.txt";
-            string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-            string fileCurrentPath = $@"..\..\..\{fileName}";
-            string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
+            string path = gmailController.GetFilePath(fileName);
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailController.SentMessageWithAttachedFile(this.firstMail, themeOfMessage, messageBody,path);
+            gmailController.SentMessageWithAttachedFile(this.firstMail, themeOfMessage, messageBody, path);
 
-            foundMessage = fluentWait.Until(x => x.FindElement(By.XPath($"//span[contains(text(),'{fileName}')]")));
+            foundMessage = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath($"//span[contains(text(),'{fileName}')]")));
 
             Assert.IsNotNull(foundMessage);
         }
@@ -74,9 +70,7 @@ namespace TestGmailViaSelenium
             themeOfMessage = "Message with incorrect file extension";
             messageBody = "sent a message to the method being tested SentMessageWithAttachedFile() with incorrect file extension";
             string fileName = "iTechArt.7z";
-            string currentPath = System.AppDomain.CurrentDomain.BaseDirectory;
-            string fileCurrentPath = $@"..\..\..\{fileName}";
-            string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
+            string path = gmailController.GetFilePath(fileName);
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
@@ -115,7 +109,6 @@ namespace TestGmailViaSelenium
 
                 bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
 
-                Thread.Sleep(1000);
                 Assert.IsTrue(isFoundMessage);
             }
             catch (Exception e)
