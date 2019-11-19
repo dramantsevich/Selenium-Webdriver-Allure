@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -16,18 +17,17 @@ namespace TestGmailViaSelenium
         IWebElement attachFile;
         IWebElement writeMessageButton;
 
-        public IWebDriver SetDriver(IWebDriver driver)
+        public void SetDriver(IWebDriver driver)
         {
             this.currentDriver = driver;
-            return this.currentDriver;
         }
 
         public GmailController(IWebDriver driver)
         {
-            SetDriver(driver);
+            this.currentDriver = driver;
         }
 
-        public Dictionary<string, string> GetDictionaryAccounts()
+        private Dictionary<string, string> GetDictionaryAccounts()
         {
             string path = "../../../Account.txt";
 
@@ -36,7 +36,7 @@ namespace TestGmailViaSelenium
             return accounts;
         }
 
-        public string SetFirstMail()
+        public string GetFirstMail()
         {
             string firstMail;
 
@@ -47,7 +47,7 @@ namespace TestGmailViaSelenium
             return firstMail;
         }
 
-        public string SetFirstPassword()
+        public string GetFirstPassword()
         {
             string firstPassword;
 
@@ -203,50 +203,58 @@ namespace TestGmailViaSelenium
             IWebElement deleteSelectedMessagesButton;
             IList<IWebElement> checkboxes = GetAllMessageCheckbox();
             int countOfMessages;
-            
+
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            try
+            countOfMessages = GetMessagesFrom(email).Count;
+
+            for (int i = 0; i < countOfMessages; i++)
             {
-                countOfMessages = GetMessagesFrom(email).Count;
+                checkboxes.ElementAt(i).Click();
+            }
 
-                for (int i = 0; i < countOfMessages; i++)
-                {
-                    checkboxes.ElementAt(i).Click();
-                }
+            deleteSelectedMessagesButton = currentDriver.FindElement(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']"));
 
-                deleteSelectedMessagesButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")));
+            if (deleteSelectedMessagesButton.Displayed)
+            {
+                deleteSelectedMessagesButton = fluentWait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")));
                 deleteSelectedMessagesButton.Click();
             }
-            catch
+            else
             {
-                throw new TimeoutException();
+                Console.WriteLine("deleteSelectedMessagesButton is not displayed");
             }
         }
 
-        public List<IWebElement> GetMessagesFrom(string email)
+        public IList<IWebElement> GetMessagesFrom(string email)
         {
-            List<IWebElement> listOfFoundMessages = new List<IWebElement>();
-            IList<IWebElement> tempFoundMessages;
+            //List<IWebElement> listOfFoundMessages = new List<IWebElement>();
+            //IList<IWebElement> tempFoundMessages;
 
-            try
-            {
-                fluentWait = FluentWait.GetFluentWait(this.currentDriver);
+            //try
+            //{
+            //    fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-                tempFoundMessages = fluentWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']")));
-                
-                foreach (IWebElement message in tempFoundMessages)
-                {
-                    listOfFoundMessages.Add(message);
-                }
+            //    //tempFoundMessages = fluentWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']")));
+            //    tempFoundMessages = currentDriver.FindElements(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']"));
 
-                return listOfFoundMessages;
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return listOfFoundMessages;
-            }
+            //    foreach (IWebElement message in tempFoundMessages)
+            //    {
+            //        listOfFoundMessages.Add(message);
+            //    }
+
+            //    return listOfFoundMessages;
+            //}
+            //catch (OpenQA.Selenium.WebDriverTimeoutException ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //    return listOfFoundMessages;
+            //}
+            IList<IWebElement> listOfFoundMessages;
+
+            listOfFoundMessages = currentDriver.FindElements(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']"));
+
+            return listOfFoundMessages;
         }
 
         public IList<IWebElement> GetAllMessageCheckbox()

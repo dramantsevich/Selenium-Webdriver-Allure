@@ -19,8 +19,8 @@ namespace TestGmailViaSelenium
 
             this.gmailController = new GmailController(this.currentDriver);
 
-            string firstMail = gmailController.SetFirstMail();
-            string firstPassword = gmailController.SetFirstPassword();
+            string firstMail = gmailController.GetFirstMail();
+            string firstPassword = gmailController.GetFirstPassword();
 
             gmailController.StartGmail(firstMail,firstPassword);
         }
@@ -30,7 +30,7 @@ namespace TestGmailViaSelenium
         {
             IWebElement accountButton;
             IWebElement currentAccountMailOnPage;
-            string currentMail = gmailController.SetFirstMail();
+            string currentMail = gmailController.GetFirstMail();
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 

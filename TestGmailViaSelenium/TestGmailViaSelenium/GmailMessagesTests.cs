@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace TestGmailViaSelenium
 {
@@ -26,8 +27,8 @@ namespace TestGmailViaSelenium
 
             this.gmailController = new GmailController(this.currentDriver);
 
-            this.firstMail = gmailController.SetFirstMail();
-            this.firstPassword = gmailController.SetFirstPassword();
+            this.firstMail = gmailController.GetFirstMail();
+            this.firstPassword = gmailController.GetFirstPassword();
 
             gmailController.StartGmail(firstMail, firstPassword);
         }
@@ -103,18 +104,11 @@ namespace TestGmailViaSelenium
         {
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            try
-            {
-                gmailController.DeleteSentMessagesFrom(this.firstMail);
+            gmailController.DeleteSentMessagesFrom(this.firstMail);
+           
+            bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
 
-                bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
-
-                Assert.IsTrue(isFoundMessage);
-            }
-            catch (Exception e)
-            {
-                Assert.IsTrue(e.Message == "The operation has timed out.");
-            }
+            Assert.IsTrue(isFoundMessage);
         }
 
         [TearDown]
