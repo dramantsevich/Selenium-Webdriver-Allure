@@ -1,11 +1,9 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace TestGmailViaSelenium
 {
@@ -13,14 +11,6 @@ namespace TestGmailViaSelenium
     {
         private IWebDriver currentDriver;
         DefaultWait<IWebDriver> fluentWait;
-        IWebElement messageBody;
-        IWebElement attachFile;
-        IWebElement writeMessageButton;
-
-        public void SetDriver(IWebDriver driver)
-        {
-            this.currentDriver = driver;
-        }
 
         public GmailController(IWebDriver driver)
         {
@@ -60,21 +50,32 @@ namespace TestGmailViaSelenium
 
         public void StartGmail(string mail, string password)
         {
-            IWebElement emailField;
-            IWebElement emailNextButton;
-            IWebElement passwordField;
-            IWebElement passwordNextButton;
             string webSiteUrl = "https://gmail.com/";
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             this.currentDriver.Navigate().GoToUrl(webSiteUrl);
 
+            SetMailInLogInWindow(mail);
+            SetPasswordInLogInWindow(password);
+        }
+        
+        public void SetMailInLogInWindow(string mail)
+        {
+            IWebElement emailField;
+            IWebElement emailNextButton;
+
             emailField = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Name("identifier")));
             emailField.SendKeys(mail);
 
             emailNextButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Id("identifierNext")));
             emailNextButton.Click();
+        }
+
+        public void SetPasswordInLogInWindow(string password)
+        {
+            IWebElement passwordField;
+            IWebElement passwordNextButton;
 
             passwordField = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
             passwordField.SendKeys(password);
@@ -110,7 +111,7 @@ namespace TestGmailViaSelenium
             searchButton.Click();
         }
 
-        public void GetAddOns()
+        public void OpenGetAddonsForm()
         {
             IWebElement getAddOns;
 
@@ -122,6 +123,8 @@ namespace TestGmailViaSelenium
 
         public void OpenNewMessageForm()
         {
+            IWebElement writeMessageButton;
+
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             writeMessageButton = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='T-I J-J5-Ji T-I-KE L3']")));
@@ -146,50 +149,58 @@ namespace TestGmailViaSelenium
             theme.SendKeys(themeOfMessage);
         }
 
-        public void SetMessageBody(string messageBody)
+        public void SetMessageBody(string messageText)
         {
-            IWebElement body;
+            IWebElement bodyOfMessage;
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            body = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
-            body.SendKeys(messageBody);
+            bodyOfMessage = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
+            bodyOfMessage.SendKeys(messageText);
+        }
+
+        public void SetAttachedFile(string pathFile)
+        {
+            IWebElement attachFile;
+
+            attachFile = fluentWait.Until(x => x.FindElement(By.XPath("//input[@name='Filedata']")));
+            attachFile.SendKeys(pathFile);
         }
 
         public void SentMessageButton()
         {
-            this.messageBody = fluentWait.Until(x => x.FindElement(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
-            this.messageBody.SendKeys(Keys.Control + Keys.Enter);
+            IWebElement messageBody;
+
+            messageBody = fluentWait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//td[@class='Ap']/div[2]/div[1]")));
+            messageBody.SendKeys(Keys.Control + Keys.Enter);
         }
 
-        public void SentMessage(string email, string themeOfMessage,string messageBody)
+        public void SentMessage(string email, string themeOfMessage, string messageText)
         {
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             OpenNewMessageForm();
             SetRecipientOfMessage(email);
             SetThemeOfMessage(themeOfMessage);
-            SetMessageBody(messageBody);
+            SetMessageBody(messageText);
 
             SentMessageButton();
         }
 
-        public void SentMessageWithAttachedFile(string email, string themeOfMessage, string messageBody, string pathFile)
+        public void SentMessageWithAttachedFile(string email, string themeOfMessage, string messageText, string pathFile)
         {
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             OpenNewMessageForm();
             SetRecipientOfMessage(email);
             SetThemeOfMessage(themeOfMessage);
-            SetMessageBody(messageBody);
-
-            attachFile = fluentWait.Until(x => x.FindElement(By.XPath("//input[@name='Filedata']")));
-            attachFile.SendKeys(pathFile);
+            SetMessageBody(messageText);
+            SetAttachedFile(pathFile);
 
             SentMessageButton();
         }
 
-        public void SentEmptyMessageForm()
+        public void SentEmptyMessage()
         {
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
@@ -208,53 +219,45 @@ namespace TestGmailViaSelenium
 
             countOfMessages = GetMessagesFrom(email).Count;
 
-            for (int i = 0; i < countOfMessages; i++)
+            for(int i = 0; i < countOfMessages; i++)
             {
                 checkboxes.ElementAt(i).Click();
             }
 
-            deleteSelectedMessagesButton = currentDriver.FindElement(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']"));
-
-            if (deleteSelectedMessagesButton.Displayed)
+            try
             {
-                deleteSelectedMessagesButton = fluentWait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")));
+                deleteSelectedMessagesButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")));
                 deleteSelectedMessagesButton.Click();
             }
-            else
+            catch(OpenQA.Selenium.WebDriverTimeoutException e)
             {
-                Console.WriteLine("deleteSelectedMessagesButton is not displayed");
+                Console.WriteLine(e.Message + $"\nMessages from {email} to delete not found");
             }
         }
 
         public IList<IWebElement> GetMessagesFrom(string email)
         {
-            //List<IWebElement> listOfFoundMessages = new List<IWebElement>();
-            //IList<IWebElement> tempFoundMessages;
+            List<IWebElement> listOfFoundMessages = new List<IWebElement>();
+            IList<IWebElement> tempFoundMessages;
 
-            //try
-            //{
-            //    fluentWait = FluentWait.GetFluentWait(this.currentDriver);
+            try
+            {
+                fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            //    //tempFoundMessages = fluentWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']")));
-            //    tempFoundMessages = currentDriver.FindElements(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']"));
+                tempFoundMessages = fluentWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']")));
+               
+                foreach (IWebElement message in tempFoundMessages)
+                {
+                    listOfFoundMessages.Add(message);
+                }
 
-            //    foreach (IWebElement message in tempFoundMessages)
-            //    {
-            //        listOfFoundMessages.Add(message);
-            //    }
-
-            //    return listOfFoundMessages;
-            //}
-            //catch (OpenQA.Selenium.WebDriverTimeoutException ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //    return listOfFoundMessages;
-            //}
-            IList<IWebElement> listOfFoundMessages;
-
-            listOfFoundMessages = currentDriver.FindElements(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{email}']"));
-
-            return listOfFoundMessages;
+                return listOfFoundMessages;
+            }
+            catch (OpenQA.Selenium.WebDriverTimeoutException e)
+            {
+                Console.WriteLine(e.Message + $"\nMessages from {email} not found");
+                return listOfFoundMessages;
+            }
         }
 
         public IList<IWebElement> GetAllMessageCheckbox()
@@ -279,21 +282,6 @@ namespace TestGmailViaSelenium
             string path = Path.GetFullPath(Path.Combine(currentPath, fileCurrentPath));
 
             return path;
-        }
-
-        public bool IsElementPresent(By by)
-        {
-            fluentWait = FluentWait.GetFluentWait(this.currentDriver);
-
-            try
-            {
-                fluentWait.Until(x => x.FindElements(by));
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }

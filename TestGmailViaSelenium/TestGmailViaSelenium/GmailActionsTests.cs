@@ -7,7 +7,6 @@ namespace TestGmailViaSelenium
 {
     public class GmailActionsTests
     {
-        private IWebElement foundMessage;
         private IWebDriver currentDriver;
         private GmailController gmailController;
         DefaultWait<IWebDriver> fluentWait;
@@ -57,8 +56,10 @@ namespace TestGmailViaSelenium
         }
 
         [Test]
-        public void ButtonSearch_FoundMessage()
+        public void SearchMessageByTheme()
         {
+            IWebElement foundMessage;
+
             string themeOfMessage = "Xinuos";
 
             fluentWait = FluentWait.GetFluentWait(currentDriver);
@@ -77,7 +78,7 @@ namespace TestGmailViaSelenium
             IWebElement addOnsFrameTitle;
             fluentWait = FluentWait.GetFluentWait(currentDriver);
 
-            gmailController.GetAddOns();
+            gmailController.OpenGetAddonsForm();
 
             addOnsFrame = fluentWait.Until(x => x.FindElement(By.XPath("//div[@id='glass-content']/iframe")));
             currentDriver.SwitchTo().Frame(addOnsFrame);

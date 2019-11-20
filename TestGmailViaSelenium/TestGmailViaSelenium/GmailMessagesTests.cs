@@ -2,8 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using System;
-using System.IO;
 using System.Threading;
 
 namespace TestGmailViaSelenium
@@ -86,13 +84,13 @@ namespace TestGmailViaSelenium
         }
 
         [Test]
-        public void SentEmptyMessageForm_IsDisplayedErrorWindow()
+        public void SentEmptyMessage_IsDisplayedErrorWindow()
         {
             IWebElement errorForm;
 
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
-            gmailController.SentEmptyMessageForm();
+            gmailController.SentEmptyMessage();
 
             errorForm = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='Kj-JD-K7 Kj-JD-K7-bsT']")));
             
@@ -105,9 +103,10 @@ namespace TestGmailViaSelenium
             fluentWait = FluentWait.GetFluentWait(this.currentDriver);
 
             gmailController.DeleteSentMessagesFrom(this.firstMail);
-           
+
             bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
 
+            Thread.Sleep(1000);
             Assert.IsTrue(isFoundMessage);
         }
 
