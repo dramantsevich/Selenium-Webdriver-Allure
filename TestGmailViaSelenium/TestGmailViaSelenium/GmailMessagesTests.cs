@@ -2,7 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using System.Threading;
 
 namespace TestGmailViaSelenium
 {
@@ -106,7 +105,6 @@ namespace TestGmailViaSelenium
 
             bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
 
-            Thread.Sleep(1000);
             Assert.IsTrue(isFoundMessage);
         }
 

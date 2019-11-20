@@ -226,8 +226,12 @@ namespace TestGmailViaSelenium
 
             try
             {
+                IWebElement windowsValidationAppearance;
+
                 deleteSelectedMessagesButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")));
                 deleteSelectedMessagesButton.Click();
+
+                windowsValidationAppearance = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='vh']/span[@class='aT']/span[@class='bAq'][contains (text(),' moved to Bin.')]")));
             }
             catch(OpenQA.Selenium.WebDriverTimeoutException e)
             {
