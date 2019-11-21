@@ -103,9 +103,9 @@ namespace TestGmailViaSelenium
 
             gmailController.DeleteSentMessagesFrom(this.firstMail);
 
-            bool isFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
+            bool isNotFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath($"//div[2]/span[@class='bA4']/span[@email='{this.firstMail}']")));
 
-            Assert.IsTrue(isFoundMessage);
+            Assert.IsTrue(isNotFoundMessage);
         }
 
         [TearDown]
