@@ -36,7 +36,7 @@ namespace TestGmailViaSelenium
             accountButton = fluentWait.Until(x => x.FindElement(By.XPath("//a[@class='gb_D gb_Fa gb_i']")));
             accountButton.Click();
 
-            currentAccountMailOnPage = fluentWait.Until(x => x.FindElement(By.XPath($"//div[@class='gb_jb']")));
+            currentAccountMailOnPage = fluentWait.Until(x => x.FindElement(By.XPath("//div[@class='gb_jb']")));
 
             Assert.IsTrue(currentAccountMailOnPage.Text == currentMail);
         }

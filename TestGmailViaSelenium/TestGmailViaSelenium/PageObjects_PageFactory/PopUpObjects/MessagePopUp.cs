@@ -26,7 +26,7 @@ namespace TestGmailViaSelenium.PageObjects_PageFactory.PopUpObjects
         public IWebElement BodyField { get; set; }
 
         /// <summary>Button for attaching file</summary>
-        [FindsBy(How = How.XPath, Using = "//input[@name='Filedata'")]
+        [FindsBy(How = How.XPath, Using = "//input[@name='Filedata']")]
         public IWebElement AttachFile { get; set; }
 
         /// <summary>Button for sent message</summary>

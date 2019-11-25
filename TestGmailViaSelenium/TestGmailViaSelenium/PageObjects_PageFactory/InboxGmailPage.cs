@@ -33,7 +33,7 @@ namespace TestGmailViaSelenium.PageObjects_PageFactory
         public IWebElement AddOns { get; set; }
 
         /// <summary>Entity for message</summary>
-        [FindsBy(How =How.XPath, Using = "//div[@class='T-I J-J5-Ji T-I-KE L3']")]
+        [FindsBy(How = How.XPath, Using = "//div[@class='T-I J-J5-Ji T-I-KE L3']")]
         public IWebElement NewMessagePopUp { get; set; }
 
         /// <summary>All checkboxes of incoming messages</summary>
@@ -96,6 +96,7 @@ namespace TestGmailViaSelenium.PageObjects_PageFactory
                         listOfFoundMessages.Add(message);
                     }
                 }
+
                 return listOfFoundMessages;
             }
             catch (OpenQA.Selenium.WebDriverTimeoutException e)
@@ -117,7 +118,7 @@ namespace TestGmailViaSelenium.PageObjects_PageFactory
         /// <summary>Delete all messages from entering mail</summary>
         public void DeleteSentMessagesFrom(string mail)
         {
-            IWebElement windowsValidationAppearance;
+            IWebElement windowValidationAppearance;
 
             DefaultWait<IWebDriver> fluentWait = FluentWait.GetFluentWait(this.driver);
 
@@ -129,7 +130,7 @@ namespace TestGmailViaSelenium.PageObjects_PageFactory
             {
                 DeleteSelectedMessagesButton.Click();
 
-                windowsValidationAppearance = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='vh']/span[@class='aT']/span[@class='bAq'][contains (text(),' moved to Bin.')]")));
+                windowValidationAppearance = fluentWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[@class='vh']/span[@class='aT']/span[@class='bAq'][contains (text(),' moved to Bin.')]")));
             }
             catch (OpenQA.Selenium.WebDriverTimeoutException e)
             {
