@@ -3,32 +3,22 @@ using OpenQA.Selenium.Support.UI;
 
 namespace PageObjectModel.Pages
 {
-    public class LoginMailPage
+    public class LoginMailPage : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By emailField = By.Name("identifier");
-        readonly By nextButton = By.Id("identifierNext");
+        readonly By emailFieldLocator = By.Name("identifier");
+        readonly By nextButtonLocator = By.Id("identifierNext");
 
-        public LoginMailPage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        public LoginMailPage(IWebDriver driver) : base(driver) { }
 
         public void SetMail(string mail)
         {
-            IWebElement emailField;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            emailField = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.emailField));
+            IWebElement emailField = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.emailFieldLocator));
             emailField.SendKeys(mail);
         }
 
         public void GoToPasswordPage()
         {
-            IWebElement nextButton;
-
-            nextButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.nextButton));
+            IWebElement nextButton = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.nextButtonLocator));
             nextButton.Click();
         }
     }

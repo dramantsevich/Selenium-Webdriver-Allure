@@ -3,25 +3,15 @@ using OpenQA.Selenium.Support.UI;
 
 namespace PageObjectModel.Pages.PopUpWindows
 {
-    public class ErrorMessagePopUp
+    public class ErrorMessagePopUp : Page
     {
-
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By title = By.XPath("//div[@class='Kj-JD-K7 Kj-JD-K7-bsT']");
+        readonly By titleLocator = By.XPath("//div[@class='Kj-JD-K7 Kj-JD-K7-bsT']");
         
-        public ErrorMessagePopUp(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        public ErrorMessagePopUp(IWebDriver driver) : base(driver) { }
 
         public IWebElement GetErrorTitle()
         {
-            IWebElement title;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            title = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.title));
-
+            IWebElement title = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.titleLocator));
             return title;
         }
     }

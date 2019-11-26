@@ -3,33 +3,22 @@ using OpenQA.Selenium.Support.UI;
 
 namespace PageObjectModel.Pages
 {
-    public class LoginPasswordPage
+    public class LoginPasswordPage : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By passwordField = By.Name("password");
-        readonly By nextButton = By.Id("passwordNext");
+        readonly By passwordFieldLocator = By.Name("password");
+        readonly By nextButtonLocator = By.Id("passwordNext");
 
-        public LoginPasswordPage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        public LoginPasswordPage(IWebDriver driver) : base(driver) { }
 
         public void SetPassword(string password)
         {
-            IWebElement passwordField;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            passwordField = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.passwordField));
+            IWebElement passwordField = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.passwordFieldLocator));
             passwordField.SendKeys(password);
         }
 
         public void LoginClick()
         {
-            IWebElement nextButton;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            nextButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.nextButton));
+            IWebElement nextButton = webDriverWait.Until(ExpectedConditions.ElementToBeClickable(this.nextButtonLocator));
             nextButton.Click();
         }
     }

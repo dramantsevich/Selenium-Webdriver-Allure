@@ -3,94 +3,71 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
-namespace PageObjectModel.Pages
+namespace PageObjectModel.Pages 
 {
-    public class InboxGmailPage
+    public class InboxGmailPage : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By googleAccount = By.XPath("//a[@class='gb_D gb_Ha gb_i']");
-        readonly By searchField = By.XPath("//input[@placeholder='Search mail']");
-        readonly By searchMailButton = By.XPath("//button[@aria-label='Search Mail']");
-        readonly By addOns = By.XPath("//div[@id='p2DdMb']//div[@class='aT5-aOt-I-JX-Jw']");
-        readonly By newMessagePopUp = By.XPath("//div[@class='T-I J-J5-Ji T-I-KE L3']");
-        readonly By allCheckboxes = By.XPath("//div[@class='oZ-jc T-Jo J-J5-Ji ']");
-        readonly By allMessages = By.XPath("//div[2]/span[@class='bA4']/span");
-        readonly By deleteSelectedMessagesButton = By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']");
-        readonly By binPopUp = By.XPath("//div[@class='vh']/span[@class='aT']/span[@class='bAq'][contains (text(),' moved to Bin.')]");
-        private By getMessageByTheme;
-        private By getMessageByFileName;
-        private By getMessageByEmail;
+        readonly By googleAccountLocator = By.XPath("//a[@class='gb_D gb_Ha gb_i']");
+        readonly By searchFieldLocator = By.XPath("//input[@placeholder='Search mail']");
+        readonly By searchMailButtonLocator = By.XPath("//button[@aria-label='Search Mail']");
+        readonly By addOnsLocator = By.XPath("//div[@id='p2DdMb']//div[@class='aT5-aOt-I-JX-Jw']");
+        readonly By newMessagePopUpLocator = By.XPath("//div[@class='z0']/div[1]");
+        readonly By allCheckboxesLocator = By.XPath("//div[@class='oZ-jc T-Jo J-J5-Ji ']");
+        readonly By allMessagesLocator = By.XPath("//div[2]/span[@class='bA4']/span");
+        readonly By deleteSelectedMessagesButtonLocator = By.XPath("//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']");
+        readonly By binPopUpLocator = By.XPath("//div[@class='vh']/span[@class='aT']/span[@class='bAq'][contains (text(),' moved to Bin.')]");
+        private By messagesByThemeLocator;
+        private By messageByFileNameLocator;
+        private By messageByEmailLocator;
 
-        public InboxGmailPage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        public InboxGmailPage(IWebDriver driver) : base(driver) { }
         
         public void OpenAccountManager()
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement account = fluentWait.Until(x => x.FindElement(googleAccount));
-
+            IWebElement account = webDriverWait.Until(x => x.FindElement(googleAccountLocator));
             account.Click();
         }
 
         public void SetSearchMailField(string searchMail)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement searchField = fluentWait.Until(x => x.FindElement(this.searchField));
-
+            IWebElement searchField = webDriverWait.Until(x => x.FindElement(this.searchFieldLocator));
             searchField.SendKeys(searchMail);
         }
 
         public void SearchMessageByTheme(string themeOfMessage)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement searchMailButton = fluentWait.Until(ExpectedConditions.ElementToBeClickable(this.searchMailButton));
-
             SetSearchMailField(themeOfMessage);
 
+            IWebElement searchMailButton = webDriverWait.Until(ExpectedConditions.ElementToBeClickable(this.searchMailButtonLocator));
             searchMailButton.Click();
         }
 
         public void OpenAddOnsPopUp()
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement addOns = fluentWait.Until(x => x.FindElement(this.addOns));
-
+            IWebElement addOns = webDriverWait.Until(x => x.FindElement(this.addOnsLocator));
             addOns.Click();
         }
 
         public void OpenNewMessagePopUp()
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement newMessage = fluentWait.Until(ExpectedConditions.ElementToBeClickable(this.newMessagePopUp));
-
+            IWebElement newMessage = webDriverWait.Until(ExpectedConditions.ElementToBeClickable(this.newMessagePopUpLocator));
             newMessage.Click();
         }
 
         public IList<IWebElement> GetAllMessageCheckboxes()
         {
-            IList<IWebElement> checkboxes;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            checkboxes = fluentWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(this.allCheckboxes));
-
+            IList<IWebElement> checkboxes = webDriverWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(this.allCheckboxesLocator));
             return checkboxes;
         }
 
         public IList<IWebElement> GetMessagesFrom(string email)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IList<IWebElement> tempFoundMessages;
-
             List<IWebElement> listOfFoundMessages = new List<IWebElement>();
 
             try
             {
-                tempFoundMessages = fluentWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(this.allMessages));
+                IList<IWebElement> tempFoundMessages = webDriverWait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(this.allMessagesLocator));
 
                 foreach (IWebElement message in tempFoundMessages)
                 {
@@ -111,27 +88,22 @@ namespace PageObjectModel.Pages
 
         public void DeleteSentMessageFrom(string mail)
         {
-            IWebElement binPopUp;
-            IWebElement deleteSelectedMessagesButton;
             IList<IWebElement> allCheckboxes = GetAllMessageCheckboxes();
-
-            fluentWait = FluentWait.GetFluentWait(this.driver);
 
             int countOfMessages = GetMessagesFrom(mail).Count;
 
             for(int i = 0; i < countOfMessages; i++)
             {
-                Thread.Sleep(500);
+                //Thread.Sleep(500);
                 allCheckboxes.ElementAt(i).Click();
             }
 
             try
             {
-                deleteSelectedMessagesButton = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.deleteSelectedMessagesButton));
+                IWebElement deleteSelectedMessagesButton = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.deleteSelectedMessagesButtonLocator));
                 deleteSelectedMessagesButton.Click();
 
-                binPopUp = GetBinPopUp();
-                Thread.Sleep(3000);
+                //IWebElement binPopUp = GetBinPopUp();
             }
             catch (OpenQA.Selenium.WebDriverTimeoutException e)
             {
@@ -141,51 +113,31 @@ namespace PageObjectModel.Pages
 
         public IWebElement GetBinPopUp()
         {
-            IWebElement binPopUp;
-
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            binPopUp = fluentWait.Until(ExpectedConditions.ElementExists(this.binPopUp));
-
+            IWebElement binPopUp = webDriverWait.Until(ExpectedConditions.ElementExists(this.binPopUpLocator));
             return binPopUp;
         }
 
         public IWebElement GetMessageByTheme(string themeOfMessage)
         {
-            IWebElement getMessage;
+            this.messagesByThemeLocator = By.XPath($"//td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
 
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            this.getMessageByTheme = By.XPath($"//td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
-
-            getMessage = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.getMessageByTheme));
-
+            IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messagesByThemeLocator));
             return getMessage;
         }
 
         public IWebElement GetMessageByFileName(string fileName)
         {
-            IWebElement getMessage;
+            this.messageByFileNameLocator = By.XPath($"//td[@class='xY a4W']/div[@class='brd']/div/span[contains(text(),'{fileName}')]");
 
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            this.getMessageByFileName = By.XPath($"//td[@class='xY a4W']/div[@class='brd']/div/span[contains(text(),'{fileName}')]");
-
-            getMessage = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.getMessageByFileName));
-
+            IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementExists(this.messageByFileNameLocator));
             return getMessage;
         }
 
         public bool IsMessagesFromMailNotFound(string mail)
         {
-            GmailController controller = new GmailController(this.driver);
+            this.messageByEmailLocator = By.XPath($"//div[2]/span[@class='bA4']/span[@email='{mail}']");
 
-            string firstMail = controller.GetFirstMail();
-            
-            this.getMessageByEmail = By.XPath($"//div[2]/span[@class='bA4']/span[@email='{firstMail}']");
-
-            bool isNotFoundMessage = fluentWait.Until(ExpectedConditions.InvisibilityOfElementLocated(this.getMessageByEmail));
-
+            bool isNotFoundMessage = webDriverWait.Until(ExpectedConditions.InvisibilityOfElementLocated(this.messageByEmailLocator));
             return isNotFoundMessage;
         }
     }

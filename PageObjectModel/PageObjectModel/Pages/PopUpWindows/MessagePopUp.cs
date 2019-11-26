@@ -4,53 +4,41 @@ using System;
 
 namespace PageObjectModel.Pages.PopUpWindows
 {
-    public class MessagePopUp
+    public class MessagePopUp : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By recipientField = By.Name("to");
-        readonly By themeField = By.Name("subjectbox");
-        readonly By bodyField = By.XPath("//td[@class='Ap']/div[2]/div[1]");
-        readonly By attachFile = By.XPath("//input[@name='Filedata']");
-        readonly By sendMessageButton = By.XPath("//div[@class='dC']/div[1]");
+        readonly By recipientFieldLocator = By.Name("to");
+        readonly By themeFieldLocator = By.Name("subjectbox");
+        readonly By bodyFieldLocator = By.XPath("//td[@class='Ap']/div[2]/div[1]");
+        readonly By attachFileLocator = By.XPath("//input[@name='Filedata']");
+        readonly By sendMessageButtonLocator = By.XPath("//div[@class='dC']/div[1]");
 
-        public MessagePopUp(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        public MessagePopUp(IWebDriver driver) : base(driver) { }
 
         public void SetRecipientOfMessage(string mail)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement recipientField = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.recipientField));
-
+            IWebElement recipientField = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.recipientFieldLocator));
             recipientField.SendKeys(mail);
         }
 
         public void SetThemeOfMessage(string themeOfMessage)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement themeField = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.themeField));
-
+            IWebElement themeField = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.themeFieldLocator));
             themeField.SendKeys(themeOfMessage);
         }
 
         public void SetMessageBody(string messageText)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement bodyField = fluentWait.Until(x => x.FindElement(this.bodyField));
-
+            IWebElement bodyField = webDriverWait.Until(x => x.FindElement(this.bodyFieldLocator));
             bodyField.SendKeys(messageText);
         }
 
         public void SetAttachedFile(string fileName)
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement attachFile = fluentWait.Until(x => x.FindElement(this.attachFile));
-            GmailController controller = new GmailController(this.driver);
+            GmailController controller = new GmailController(driver);
 
             string path = controller.GetFilePath(fileName);
 
+            IWebElement attachFile = webDriverWait.Until(x => x.FindElement(this.attachFileLocator));
             attachFile.SendKeys(path);
         }
 
@@ -63,32 +51,27 @@ namespace PageObjectModel.Pages.PopUpWindows
 
         public void SendMessage()
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement sendMessageButton = fluentWait.Until(ExpectedConditions.ElementToBeClickable(this.sendMessageButton));
-
+            IWebElement sendMessageButton = webDriverWait.Until(ExpectedConditions.ElementToBeClickable(this.sendMessageButtonLocator));
             sendMessageButton.Click();
         }
 
         public void SendFullMessage(string email, string themeOfMessage, string messageText)
         {
             SetFullMessage(email, themeOfMessage, messageText);
-
             SendMessage();
         }
 
         public void SendMessageWithAttachedFile(string email, string themeOfMessage, string messageText, string pathFile)
         {
             SetFullMessage(email, themeOfMessage, messageText);
-
             SetAttachedFile(pathFile);
-
             SendMessage();
         }
 
         public void ConfirmAlert()
         {
             try {
-                IAlert alert = fluentWait.Until(ExpectedConditions.AlertIsPresent());
+                IAlert alert = webDriverWait.Until(ExpectedConditions.AlertIsPresent());
                 alert.Accept();
             }
             catch(WebDriverTimeoutException ex)

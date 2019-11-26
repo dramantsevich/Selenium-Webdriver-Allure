@@ -3,34 +3,25 @@ using OpenQA.Selenium.Support.UI;
 
 namespace PageObjectModel.Pages.PopUpWindows
 {
-    public class AddOnsPopUp
+    public class AddOnsPopUp : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By title = By.XPath("//span[@class='yQsxXc']");
-        readonly By addOnsFrame = By.XPath("//div[@id='glass-content']/iframe");
+        readonly By titleLocator = By.XPath("//span[@class='yQsxXc']");
+        readonly By addOnsFrameLocator = By.XPath("//div[@id='glass-content']/iframe");
+
+        public AddOnsPopUp(IWebDriver driver) : base(driver)
+        {
+            SwitchToAddOnsFrame();
+        }
 
         public IWebElement GetAddOnsTitle()
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement title = fluentWait.Until(x => x.FindElement(this.title));
-
+            IWebElement title = webDriverWait.Until(x => x.FindElement(this.titleLocator));
             return title;
-        }
-
-        public AddOnsPopUp(IWebDriver driver)
-        {
-            this.driver = driver;
-            SwitchToAddOnsFrame();
         }
 
         public void SwitchToAddOnsFrame()
         {
-            IWebElement addOnsFrame;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            addOnsFrame = fluentWait.Until(x => x.FindElement(this.addOnsFrame));
-
+            IWebElement addOnsFrame = webDriverWait.Until(x => x.FindElement(this.addOnsFrameLocator));
             this.driver.SwitchTo().Frame(addOnsFrame);
         }
     }

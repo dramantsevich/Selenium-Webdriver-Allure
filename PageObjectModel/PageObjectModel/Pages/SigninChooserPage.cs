@@ -1,22 +1,14 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 
 namespace PageObjectModel.Pages
 {
-    class SigninChooserPage
+    class SigninChooserPage : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
 
-        public SigninChooserPage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
-
+        public SigninChooserPage(IWebDriver driver) : base(driver) { }
         public string GetCurrentUrl()
         {
-            string currentUrl = driver.Url;
-
+            string currentUrl = this.driver.Url;
             return currentUrl;
         }
     }

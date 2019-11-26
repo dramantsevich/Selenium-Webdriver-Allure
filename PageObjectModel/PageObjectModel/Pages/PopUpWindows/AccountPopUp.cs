@@ -3,32 +3,22 @@ using OpenQA.Selenium.Support.UI;
 
 namespace PageObjectModel.Pages.PopUpWindows
 {
-    public class AccountPopUp
+    public class AccountPopUp : Page
     {
-        private readonly IWebDriver driver;
-        DefaultWait<IWebDriver> fluentWait;
-        readonly By signOut = By.XPath("//a[@id='gb_71']");
-        readonly By currentAccountMail = By.XPath("//div[@class='gb_kb']");
+        readonly By signOutLocator = By.XPath("//a[@id='gb_71']");
+        readonly By currentAccountMailLocator = By.XPath("//div[@class='gb_kb']");
 
-        public AccountPopUp(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+        public AccountPopUp(IWebDriver driver) : base(driver) { }
 
         public void SignOutFromAccount()
         {
-            IWebElement signOut;
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-
-            signOut = fluentWait.Until(x => x.FindElement(this.signOut));
+            IWebElement signOut = webDriverWait.Until(x => x.FindElement(this.signOutLocator));
             signOut.Click();
         }
 
         public IWebElement GetCurrentAccountMail()
         {
-            fluentWait = FluentWait.GetFluentWait(this.driver);
-            IWebElement currentAccountMail = fluentWait.Until(ExpectedConditions.ElementIsVisible(this.currentAccountMail));
-
+            IWebElement currentAccountMail = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.currentAccountMailLocator));
             return currentAccountMail;
         }
     }
