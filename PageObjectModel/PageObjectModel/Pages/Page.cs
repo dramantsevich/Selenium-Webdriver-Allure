@@ -6,7 +6,7 @@ namespace PageObjectModel.Pages
 {
     public class Page
     {
-        internal DefaultWait<IWebDriver> webDriverWait;
+        protected DefaultWait<IWebDriver> webDriverWait;
         protected IWebDriver driver;
 
         public Page(IWebDriver driver)

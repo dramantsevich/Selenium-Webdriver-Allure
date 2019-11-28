@@ -1,0 +1,30 @@
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.PageObjects;
+
+namespace PageFactoryProject.Pages
+{
+    public class LoginPasswordPage : Page
+    {
+        [FindsBy(How = How.Name, Using = "password")]
+        private readonly IWebElement PasswordField;
+
+        [FindsBy(How = How.Id, Using = "passwordNext")]
+        private readonly IWebElement NextButton;
+
+        public LoginPasswordPage(IWebDriver driver) : base(driver) { }
+
+        public void SetPassword(string password)
+        {
+            webDriverWait.Until(ExpectedConditions.ElementIsVisible(By.Name("password")));
+            PasswordField.SendKeys(password);
+        }
+
+        public InboxGmailPage LoginClick()
+        {
+            NextButton.Click();
+
+            return new InboxGmailPage(driver);
+        }
+    }
+}

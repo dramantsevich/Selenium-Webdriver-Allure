@@ -115,7 +115,7 @@ namespace PageObjectModel.GmailTests
             bool isNotFoundMessage = inboxGmailPage.IsMessagesFromMailNotFound(this.firstMail);
 
             Thread.Sleep(1000);
-
+            
             Assert.IsTrue(isNotFoundMessage);
         }
 
