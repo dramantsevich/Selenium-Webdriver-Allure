@@ -54,7 +54,6 @@ namespace PageFactoryProject.Tests
             SigninChooserPage signinChooserPage = accountPopUp.SignOutFromAccount();
 
             string signinChooserPageUrl = signinChooserPage.GetCurrentUrl();
-
             string currentUrl = this.driver.Url;
 
             Assert.AreEqual(signinChooserPageUrl, currentUrl);
@@ -67,7 +66,7 @@ namespace PageFactoryProject.Tests
 
             inboxGmailPage.SearchMessageByTheme(themeOfMessage);
 
-            IWebElement foundMessage = inboxGmailPage.GetMessageByTheme(themeOfMessage);
+            IWebElement foundMessage = inboxGmailPage.GetSearchedMessageByTheme(themeOfMessage);
             
             Assert.IsTrue(foundMessage.Displayed);
         }
@@ -77,9 +76,9 @@ namespace PageFactoryProject.Tests
         {
             AddOnsPopUp addOnsPopUp = inboxGmailPage.OpenAddOnsPopUp();
 
-            IWebElement addOnsTitle = addOnsPopUp.Title;
+            string addOnsTitleText = addOnsPopUp.GetTitleText();
 
-            Assert.IsTrue(addOnsTitle.Displayed);
+            Assert.IsTrue(addOnsTitleText.Length > 0);
         }
 
         [TearDown]

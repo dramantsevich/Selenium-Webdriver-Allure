@@ -8,18 +8,23 @@ namespace PageFactoryProject.Pages.PopUpsObjects
     public class MessagePopUp : Page
     {
         [FindsBy(How = How.Name, Using = "to")]
+        [CacheLookup]
         private readonly IWebElement RecipientField;
 
         [FindsBy(How = How.Name, Using = "subjectbox")]
+        [CacheLookup]
         private readonly IWebElement ThemeField;
 
         [FindsBy(How = How.XPath, Using = "//td[@class='Ap']/div[2]/div[1]")]
+        [CacheLookup]
         private readonly IWebElement BodyField;
 
         [FindsBy(How = How.XPath, Using = "//input[@name='Filedata']")]
-        private readonly IWebElement AttachFile;
+        [CacheLookup]
+        private readonly IWebElement AttachFileButton;
 
         [FindsBy(How = How.XPath, Using = "//div[@class='dC']/div[1]")]
+        [CacheLookup]
         private readonly IWebElement SendMessageButton;
         
         public MessagePopUp(IWebDriver driver) : base(driver) { }
@@ -41,7 +46,7 @@ namespace PageFactoryProject.Pages.PopUpsObjects
 
         public void SetAttachedFile(string pathFile)
         {
-            AttachFile.SendKeys(pathFile);
+            AttachFileButton.SendKeys(pathFile);
         }
 
         public void SetFullMessage(string email, string themeOfMessage, string messageText)
@@ -68,12 +73,12 @@ namespace PageFactoryProject.Pages.PopUpsObjects
         public void SendMessageWithAttachedFile(string email, string themeOfMessage, string messageText, string pathFile)
         {
             SetFullMessage(email, themeOfMessage, messageText);
-
             SetAttachedFile(pathFile);
 
             SendMessage();
         }
-        public void ConfirmAlert()
+
+        public void ConfirmAlertPopUp()
         {
             try
             {

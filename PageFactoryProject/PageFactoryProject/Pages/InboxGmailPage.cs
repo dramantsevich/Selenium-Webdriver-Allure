@@ -1,40 +1,44 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using OpenQA.Selenium.Support.UI;
 using PageFactoryProject.Pages.PopUpsObjects;
-using System.Threading;
 using SeleniumExtras.PageObjects;
-//using OpenQA.Selenium.Support.PageObjects;
 
 namespace PageFactoryProject.Pages
 {
     public class InboxGmailPage : Page
     {
         [FindsBy(How = How.XPath, Using = "//div[@class='gb_Nf gb_Qa gb_Dg gb_i']/a")]
-        private readonly IWebElement GoogleAccount;
+        [CacheLookup]
+        private readonly IWebElement GoogleAccountPopUp;
 
         [FindsBy(How = How.XPath, Using = "//input[@placeholder='Search mail']")]
+        [CacheLookup]
         private readonly IWebElement SearchField;
 
         [FindsBy(How = How.XPath, Using = "//button[@aria-label='Search Mail']")]
+        [CacheLookup]
         private readonly IWebElement SearchMailButton;
 
         [FindsBy(How = How.XPath, Using = "//div[@id='p2DdMb']//div[@class='aT5-aOt-I-JX-Jw']")]
-        private readonly IWebElement AddOns;
+        [CacheLookup]
+        private readonly IWebElement AddOnsPopUp;
 
         [FindsBy(How = How.XPath, Using = "//div[@class='T-I J-J5-Ji T-I-KE L3']")]
+        [CacheLookup]
         private readonly IWebElement NewMessagePopUp;
 
-        [FindsBy(How = How.XPath, Using = "//*[@role='checkbox']")]
-        private readonly IList<IWebElement> AllCheckboxes;
+        [FindsBy(How = How.XPath, Using = "//div[@class='oZ-jc T-Jo J-J5-Ji ' and @role='checkbox']")]
+        [CacheLookup]
+        private readonly IList<IWebElement> AllMessagesCheckboxes;
 
-        [FindsByAll]
         [FindsBy(How = How.XPath, Using = "//div[2]/span[@class='bA4']/span")]
+        [CacheLookup]
         private readonly IList<IWebElement> AllMessages;
 
         [FindsBy(How = How.XPath, Using = "//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")]
+        [CacheLookup]
         private readonly IWebElement DeleteSelectedMessagesButton;
 
         private By messagesByThemeLocator;
@@ -45,7 +49,7 @@ namespace PageFactoryProject.Pages
 
         public GoogleAccountPopUp OpenAccountManager()
         {
-            GoogleAccount.Click();
+            GoogleAccountPopUp.Click();
 
             return new GoogleAccountPopUp(driver);
         }
@@ -64,7 +68,7 @@ namespace PageFactoryProject.Pages
 
         public AddOnsPopUp OpenAddOnsPopUp()
         {
-            AddOns.Click();
+            AddOnsPopUp.Click();
 
             return new AddOnsPopUp(driver);
         }
@@ -74,6 +78,43 @@ namespace PageFactoryProject.Pages
             NewMessagePopUp.Click();
 
             return new MessagePopUp(driver);
+        }
+
+        public Dictionary<IWebElement, IWebElement> GetDictionaryChechboxEmail() 
+        {
+            Dictionary<IWebElement, IWebElement> checkboxEmailPairs = new Dictionary<IWebElement, IWebElement>();
+
+            for(int i = 0; i < AllMessages.Count; i++)
+            {
+                checkboxEmailPairs.Add(AllMessages[i], AllMessagesCheckboxes[i]);
+            }
+
+            return checkboxEmailPairs;
+        }
+
+        public Dictionary<IWebElement, IWebElement> GetCheckboxesFromMail(string mail)
+        {
+            Dictionary<IWebElement, IWebElement> checkboxesFromMailPairs = new Dictionary<IWebElement, IWebElement>();
+
+            foreach(var checkboxesFromMail in GetDictionaryChechboxEmail())
+            {
+                if(checkboxesFromMail.Key.GetAttribute("email") == mail)
+                {
+                    checkboxesFromMailPairs.Add(checkboxesFromMail.Key, checkboxesFromMail.Value);
+                }
+            }
+
+            return checkboxesFromMailPairs;
+        }
+
+        public void SelectCheckboxesFromMail(string mail)
+        {
+            Dictionary<IWebElement, IWebElement> checkboxesFromMailPairs = GetCheckboxesFromMail(mail);
+
+            foreach(var checkbox in checkboxesFromMailPairs)
+            {
+                checkbox.Value.Click();
+            }
         }
 
         public IList<IWebElement> GetMessagesFrom(string email)
@@ -101,30 +142,33 @@ namespace PageFactoryProject.Pages
 
         public void DeleteAllSentMessagesFrom(string mail)
         {
-            int countOfMessages = GetMessagesFrom(mail).Count;
-            Console.WriteLine(countOfMessages);
+            SelectCheckboxesFromMail(mail);
 
-            for (int i = 0; i < countOfMessages; i++)
-            {
-                Thread.Sleep(500);
-
-                AllCheckboxes.ElementAt(i + 1).Click();
-            }
             try
             {
-                //DeleteSelectedMessagesButton.Click();
+                DeleteSelectedMessagesButton.Click();
             }
-            catch (OpenQA.Selenium.WebDriverTimeoutException e)
+            catch(System.Reflection.TargetInvocationException ex)
             {
-                Console.WriteLine(e.Message + $"\nMessages from {mail} to delete not found");
+                Console.WriteLine(ex.Message + $"\nMessages from {mail} to delete not found");
             }
+        }
+
+        public IWebElement GetSearchedMessageByTheme(string themeOfMessage)
+        {
+            this.messageByEmailLocator = By.XPath($"//div[@class='nH']/div[2]/div[@class='ae4 UI']/div[2]/div/table/tbody/tr/td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
+
+            IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messageByEmailLocator));
+
+            return getMessage;
         }
 
         public IWebElement GetMessageByTheme(string themeOfMessage)
         {
-            this.messagesByThemeLocator = By.XPath($"//td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
+            this.messagesByThemeLocator = By.XPath($"//div[6]/div/div[@class='ae4 aDM']/div/div/table/tbody/tr/td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
 
             IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messagesByThemeLocator));
+
             return getMessage;
         }
 
@@ -133,6 +177,7 @@ namespace PageFactoryProject.Pages
             this.messageByFileNameLocator = By.XPath($"//td[@class='xY a4W']/div[@class='brd']/div/span[contains(text(),'{fileName}')]");
 
             IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementExists(this.messageByFileNameLocator));
+
             return getMessage;
         }
 
@@ -141,6 +186,7 @@ namespace PageFactoryProject.Pages
             this.messageByEmailLocator = By.XPath($"//div[2]/span[@class='bA4']/span[@email='{mail}']");
 
             bool isNotFoundMessage = webDriverWait.Until(ExpectedConditions.InvisibilityOfElementLocated(this.messageByEmailLocator));
+
             return isNotFoundMessage;
         }
     }

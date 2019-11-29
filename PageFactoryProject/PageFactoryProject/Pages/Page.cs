@@ -13,7 +13,9 @@ namespace PageFactoryProject.Pages
         public Page(IWebDriver driver)
         {
             this.driver = driver;
+
             this.webDriverWait = GetWebDriverWait(this.driver);
+
             PageFactory.InitElements(this, new RetryingElementLocator(driver, TimeSpan.FromSeconds(20)));
         }
 

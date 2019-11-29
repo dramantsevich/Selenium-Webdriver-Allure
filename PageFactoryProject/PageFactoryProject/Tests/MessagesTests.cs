@@ -4,7 +4,6 @@ using OpenQA.Selenium.Chrome;
 using PageFactoryProject.Pages;
 using PageFactoryProject.Pages.PopUpsObjects;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace PageFactoryProject.Tests
@@ -19,6 +18,8 @@ namespace PageFactoryProject.Tests
         string firstPassword;
         string themeOfMessage;
         string messageBody;
+        string fileName;
+        string pathFileName;
 
         [SetUp]
         public void SetUp()
@@ -59,13 +60,14 @@ namespace PageFactoryProject.Tests
         {
             this.themeOfMessage = "Message with attached file";
             this.messageBody = "sent a message to the method being tested SentMessageWithAttachedFile()";
-            string fileName = "Account.txt";
-            string pathFileName = controller.GetFilePath(fileName);
+            this.fileName = "Account.txt";
+            this.pathFileName = controller.GetFilePath(fileName);
 
             MessagePopUp messagePopUp = inboxGmailPage.OpenNewMessagePopUp();
             messagePopUp.SendMessageWithAttachedFile(this.firstMail, this.themeOfMessage, this.messageBody, pathFileName);
 
             this.foundMessage = inboxGmailPage.GetMessageByFileName(fileName);
+
             Assert.IsTrue(foundMessage.Displayed);
         }
 
@@ -75,12 +77,12 @@ namespace PageFactoryProject.Tests
         {
             this.themeOfMessage = "incorrect file extension";
             this.messageBody = "sent a message to the method being tested SentMessageWithAttachedFile() with incorrect file extension";
-            string fileName = "iTechArt.7z";
-            string pathFileName = controller.GetFilePath(fileName);
+            this.fileName = "iTechArt.7z";
+            this.pathFileName = controller.GetFilePath(fileName);
 
             MessagePopUp messagePopUp = inboxGmailPage.OpenNewMessagePopUp();
             messagePopUp.SendMessageWithAttachedFile(this.firstMail, this.themeOfMessage, this.messageBody, pathFileName);
-            messagePopUp.ConfirmAlert();
+            messagePopUp.ConfirmAlertPopUp();
 
             this.foundMessage = inboxGmailPage.GetMessageByTheme(themeOfMessage);
 
@@ -94,9 +96,9 @@ namespace PageFactoryProject.Tests
 
             ErrorMessagePopUp errorMessagePopUp = messagePopUp.SendMessage();
 
-            IWebElement errorPopUpTitle = errorMessagePopUp.Title;
+            string errorPopUpTitleText = errorMessagePopUp.GetTitleText();
 
-            Assert.IsTrue(errorPopUpTitle.Displayed);
+            Assert.IsTrue(errorPopUpTitleText.Length > 0);
         }
 
         [Test]
@@ -104,11 +106,11 @@ namespace PageFactoryProject.Tests
         {
             inboxGmailPage.DeleteAllSentMessagesFrom(this.firstMail);
 
-            //bool isNotFoundMessage = inboxGmailPage.IsMessagesFromMailNotFound(this.firstMail);
+            bool isNotFoundMessage = inboxGmailPage.IsMessagesFromMailNotFound(this.firstMail);
 
-            ////Thread.Sleep(1000);
+            Thread.Sleep(1000);
 
-            //Assert.IsTrue(isNotFoundMessage);
+            Assert.IsTrue(isNotFoundMessage);
         }
 
         [TearDown]
