@@ -7,7 +7,6 @@ namespace PageFactoryProject.Pages
     public class LoginPasswordPage : Page
     {
         [FindsBy(How = How.Name, Using = "password")]
-        [CacheLookup]
         private readonly IWebElement PasswordField;
 
         [FindsBy(How = How.Id, Using = "passwordNext")]

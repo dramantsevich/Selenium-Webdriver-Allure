@@ -30,11 +30,9 @@ namespace PageFactoryProject.Pages
         private readonly IWebElement NewMessagePopUp;
 
         [FindsBy(How = How.XPath, Using = "//div[@class='oZ-jc T-Jo J-J5-Ji ' and @role='checkbox']")]
-        [CacheLookup]
         private readonly IList<IWebElement> AllMessagesCheckboxes;
 
         [FindsBy(How = How.XPath, Using = "//div[2]/span[@class='bA4']/span")]
-        [CacheLookup]
         private readonly IList<IWebElement> AllMessages;
 
         [FindsBy(How = How.XPath, Using = "//div[@class='T-I J-J5-Ji nX T-I-ax7 T-I-Js-Gs mA']")]

@@ -98,6 +98,8 @@ namespace PageFactoryProject.Tests
 
             string errorPopUpTitleText = errorMessagePopUp.GetTitleText();
 
+            Console.WriteLine(errorPopUpTitleText);
+
             Assert.IsTrue(errorPopUpTitleText.Length > 0);
         }
 

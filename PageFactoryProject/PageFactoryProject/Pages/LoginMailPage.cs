@@ -7,7 +7,6 @@ namespace PageFactoryProject.Pages
     public class LoginMailPage : Page
     {
         [FindsBy(How = How.Name, Using = "identifier")]
-        [CacheLookup]
         private readonly IWebElement EmailField;
 
         [FindsBy(How = How.Id, Using = ("identifierNext"))]
