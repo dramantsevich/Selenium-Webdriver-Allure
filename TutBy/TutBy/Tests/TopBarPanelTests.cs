@@ -22,10 +22,7 @@ namespace TutBy.Tests
 
             ResourcePage resourcePage = topBarPanel.AllSectionsButtonClick();
 
-            string resourcePageUrl = resourcePage.GetCurrentUrl();
-            string currentUrl = this.driver.Url;
-
-            Assert.AreEqual(resourcePageUrl, currentUrl);
+            Assert.IsTrue(resourcePage.IsDisplayed());
         }
     }
 }

@@ -16,13 +16,9 @@ namespace TutBy.Tests
         [AllureSeverity(SeverityLevel.critical)]
         [AllureOwner("Ramantsevich Dzmitry")]
         [AllureSuite("LoginFormPopupTests")]
-        public void LogoutFromAccount()
+        public void LogoutFromAccount_IsLoginFormEnabled()
         {
-            this.authorizeFormPopup = homePage.OpenLoginForm();
-            authorizeFormPopup.SetLogin(login);
-            authorizeFormPopup.SetPassword(password);
-
-            this.homePage = authorizeFormPopup.LoginButtonClick();
+            SigninAccount();
 
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             authorizeFormPopup.LogoutButtonClick();
@@ -37,19 +33,12 @@ namespace TutBy.Tests
         [AllureSuite("LoginFormPopupTests")]
         public void ClickSupportButton_IsOpenSupportPage()
         {
-            this.authorizeFormPopup = homePage.OpenLoginForm();
-            authorizeFormPopup.SetLogin(login);
-            authorizeFormPopup.SetPassword(password);
-
-            this.homePage = authorizeFormPopup.LoginButtonClick();
+            SigninAccount();
 
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             SupportPage supportPage = authorizeFormPopup.ClickSupportButton();
 
-            string supportPageUrl = supportPage.GetCurrentUrl();
-            string currentUrl = this.driver.Url;
-
-            Assert.AreEqual(supportPageUrl, currentUrl);
+            Assert.IsTrue(supportPage.IsDisplayed());
         }
 
         [Test]
@@ -59,19 +48,21 @@ namespace TutBy.Tests
         [AllureSuite("LoginFormPopupTests")]
         public void ClickProfileButton_IsOpenProfilesPage()
         {
+            SigninAccount();
+
+            this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
+            ProfilePage profilePage = authorizeFormPopup.ClickProfileButton();
+
+            Assert.IsTrue(profilePage.IsDisplayed());
+        }
+
+        public void SigninAccount()
+        {
             this.authorizeFormPopup = homePage.OpenLoginForm();
             authorizeFormPopup.SetLogin(login);
             authorizeFormPopup.SetPassword(password);
 
             this.homePage = authorizeFormPopup.LoginButtonClick();
-
-            this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
-            ProfilePage profilePage = authorizeFormPopup.ClickProfileButton();
-
-            string profilePageUrl = profilePage.GetCurrentUrl();
-            string currentUrl = this.driver.Url;
-
-            Assert.AreEqual(profilePageUrl, currentUrl);
         }
     }
 }

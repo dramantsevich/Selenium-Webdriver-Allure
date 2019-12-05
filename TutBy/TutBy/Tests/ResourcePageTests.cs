@@ -24,10 +24,7 @@ namespace TutBy.Tests
             
             HomePage pageHome = resourcePage.LogoClick();
 
-            string homePageUrl = pageHome.GetCurrentUrl();
-            string currentUrl = this.driver.Url;
-
-            Assert.AreEqual(homePageUrl, currentUrl);
+            Assert.IsTrue(pageHome.IsDisplayed());
         } 
     }
 }

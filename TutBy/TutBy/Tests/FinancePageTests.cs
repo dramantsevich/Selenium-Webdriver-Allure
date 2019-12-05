@@ -3,7 +3,6 @@ using NUnit.Framework;
 using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
-using AShotNet;
 
 namespace TutBy.Tests
 {

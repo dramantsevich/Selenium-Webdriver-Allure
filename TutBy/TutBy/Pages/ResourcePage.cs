@@ -17,5 +17,13 @@ namespace TutBy.Pages
 
             return new HomePage(this.driver);
         }
+
+        public bool IsDisplayed()
+        {
+            if (Logo.Displayed)
+                return true;
+            else
+                return false;
+        }
     }
 }

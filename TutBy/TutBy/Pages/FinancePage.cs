@@ -1,6 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using AShotNet.ScreenTaker;
+using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
-using AShotNet;
 
 namespace TutBy.Pages
 {
@@ -30,8 +30,11 @@ namespace TutBy.Pages
         [CacheLookup]
         private readonly IWebElement CurrencyConverterSecondDropDownMenuTd;
 
-        private By currencyLocator;
+        [FindsBy(How = How.XPath, Using = "//div[@id='mainmenu']//ul[@class='b-topbar-i']//li[2]/a[contains(text(),'TUT.BY')]")]
+        [CacheLookup]
+        private readonly IWebElement TopBarLinkTutBy;
 
+        private By currencyLocator;
         public FinancePage(IWebDriver driver) : base(driver) { }
 
         public void SetCurrencyConverterFirstField(string cash)
@@ -42,9 +45,7 @@ namespace TutBy.Pages
 
         public string GetCurrencyConverterFirstField()
         {
-            string cash = CurrencyConverterFirstField.GetAttribute("value");
-
-            return cash;
+            return CurrencyConverterFirstField.GetAttribute("value");
         }
 
         public void SetCurrencyConverterSecondField(string cash)
@@ -54,11 +55,11 @@ namespace TutBy.Pages
 
         public string GetCurrencyConverterSecondField()
         {
-            string cash = CurrencyConverterSecondField.GetAttribute("value");
-            new AShot()
-                .TakeScreenshot(driver, CurrencyConverterSecondField);
+            new AShotNet.AShot()
+                .ShootingStrategy(new ViewportPastingStrategy(10))
+                .TakeScreenshot(driver);
 
-            return cash;
+            return CurrencyConverterSecondField.GetAttribute("value");
         }
 
         public void SetCurrencyConverterFirstCurrency(string currency)
@@ -79,6 +80,14 @@ namespace TutBy.Pages
 
             IWebElement currencyButton = CurrencyConverterSecondDropDownMenuTd.FindElement(currencyLocator);
             currencyButton.Click();
+        }
+
+        public bool IsDispayed()
+        {
+            if (TopBarLinkTutBy.Displayed)
+                return true;
+            else
+                return false;
         }
     }
 }

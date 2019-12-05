@@ -46,7 +46,8 @@ namespace TutBy.Pages
         {
             if (Account.Text.Length > 0)
                 return true;
-            else return false;
+            else 
+                return false;
         }
 
         public bool IsLoginFormEnabled()
@@ -69,6 +70,14 @@ namespace TutBy.Pages
             FinanceButton.Click();
 
             return new FinancePage(this.driver);
+        }
+
+        public bool IsDisplayed()
+        {
+            if (FinanceButton.Displayed)
+                return true;
+            else
+                return false;
         }
     }
 }

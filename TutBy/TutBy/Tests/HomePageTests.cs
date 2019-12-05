@@ -32,7 +32,7 @@ namespace TutBy.Tests
         [AllureSeverity(SeverityLevel.minor)]
         [AllureOwner("Ramantsevich Dzmitry")]
         [AllureSuite("HomePageTests")]
-        public void OpenTopBarPanel_IsOpen()
+        public void OpenTopBarPanel_IsOpenTopBarPanel()
         {
             TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
 
@@ -44,14 +44,11 @@ namespace TutBy.Tests
         [AllureSeverity(SeverityLevel.critical)]
         [AllureOwner("Ramantsevich Dzmitry")]
         [AllureSuite("HomePageTests")]
-        public void OpenFinanePage_IsOpen()
+        public void OpenFinancePage_IsOpenFinancePage()
         {
             FinancePage financePage = homePage.OpenFinancePage();
 
-            string financePageUrl = financePage.GetCurrentUrl();
-            string currentUrl = this.driver.Url;
-
-            Assert.AreEqual(financePageUrl, currentUrl);
+            Assert.IsTrue(financePage.IsDispayed());
         }
     }
 }

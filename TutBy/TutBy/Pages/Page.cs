@@ -17,9 +17,7 @@ namespace TutBy.Pages
 
         public string GetCurrentUrl()
         {
-            string currentUrl = this.driver.Url;
-
-            return currentUrl;
+            return this.driver.Url;
         }
     }
 }
