@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -58,6 +59,9 @@ namespace PageFactory.Pages.PopUpObjects
 
         public ErrorMessagePopUp SendMessage()
         {
+            Actions action = new Actions(driver);
+            action.MoveToElement(SendMessageButton).Build().Perform();
+
             SendMessageButton.Click();
 
             return new ErrorMessagePopUp(driver);

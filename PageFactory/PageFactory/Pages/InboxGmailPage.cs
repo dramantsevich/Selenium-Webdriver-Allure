@@ -9,7 +9,7 @@ namespace PageFactory.Pages
 {
     public class InboxGmailPage : Page
     {
-        [FindsBy(How = How.XPath, Using = "//div[@class='gb_Nf gb_Qa gb_Dg gb_i']/a")]
+        [FindsBy(How = How.XPath, Using = "//span[@class='gb_Ia gbii']")]
         [CacheLookup]
         private readonly IWebElement GoogleAccountPopUp;
 
@@ -156,36 +156,28 @@ namespace PageFactory.Pages
         {
             this.messageByEmailLocator = By.XPath($"//div[@class='nH']/div[2]/div[@class='ae4 UI']/div[2]/div/table/tbody/tr/td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
 
-            IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messageByEmailLocator));
-
-            return getMessage;
+            return webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messageByEmailLocator));
         }
 
         public IWebElement GetMessageByTheme(string themeOfMessage)
         {
             this.messagesByThemeLocator = By.XPath($"//div[6]/div/div[@class='ae4 aDM']/div/div/table/tbody/tr/td[@class='xY a4W']/div/div/div/span/span[contains(text(),'{themeOfMessage}')]");
 
-            IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messagesByThemeLocator));
-
-            return getMessage;
+            return webDriverWait.Until(ExpectedConditions.ElementIsVisible(this.messagesByThemeLocator));
         }
 
         public IWebElement GetMessageByFileName(string fileName)
         {
             this.messageByFileNameLocator = By.XPath($"//td[@class='xY a4W']/div[@class='brd']/div/span[contains(text(),'{fileName}')]");
 
-            IWebElement getMessage = webDriverWait.Until(ExpectedConditions.ElementExists(this.messageByFileNameLocator));
-
-            return getMessage;
+            return webDriverWait.Until(ExpectedConditions.ElementExists(this.messageByFileNameLocator));
         }
 
         public bool IsMessagesFromMailNotFound(string mail)
         {
             this.messageByEmailLocator = By.XPath($"//div[2]/span[@class='bA4']/span[@email='{mail}']");
 
-            bool isNotFoundMessage = webDriverWait.Until(ExpectedConditions.InvisibilityOfElementLocated(this.messageByEmailLocator));
-
-            return isNotFoundMessage;
+            return webDriverWait.Until(ExpectedConditions.InvisibilityOfElementLocated(this.messageByEmailLocator));
         }
     }
 }

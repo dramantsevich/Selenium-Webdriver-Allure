@@ -41,35 +41,27 @@ namespace PageFactory.Tests
 
             IWebElement currentAccountMail = accountPopUp.CurrentAccountMail;
 
-            string actualMailOnPage = currentAccountMail.Text;
-            string expectedMail = controller.GetFirstMail();
-
-            Assert.AreEqual(expectedMail, actualMailOnPage);
+            Assert.AreEqual(controller.GetFirstMail(), currentAccountMail.Text);
         }
 
         [Test]
-        public void SignOutFromAccount()
+        public void SignOutFromAccount_IsSignOut()
         {
             this.accountPopUp = inboxGmailPage.OpenAccountManager();
 
             SigninChooserPage signinChooserPage = accountPopUp.SignOutFromAccount();
 
-            string signinChooserPageUrl = signinChooserPage.GetCurrentUrl();
-            string currentUrl = this.driver.Url;
-
-            Assert.AreEqual(signinChooserPageUrl, currentUrl);
+            Assert.AreEqual(signinChooserPage.GetCurrentUrl(), this.driver.Url);
         }
 
         [Test]
-        public void SearchMessageByTheme()
+        public void SearchMessageByTheme_IsSearchedMessageDisplayed()
         {
             string themeOfMessage = "Xinuos Inc.";
 
             inboxGmailPage.SearchMessageByTheme(themeOfMessage);
 
-            IWebElement foundMessage = inboxGmailPage.GetSearchedMessageByTheme(themeOfMessage);
-
-            Assert.IsTrue(foundMessage.Displayed);
+            Assert.IsTrue(inboxGmailPage.GetSearchedMessageByTheme(themeOfMessage).Displayed);
         }
 
         [Test]
@@ -77,9 +69,7 @@ namespace PageFactory.Tests
         {
             AddOnsPopUp addOnsPopUp = inboxGmailPage.OpenAddOnsPopUp();
 
-            string addOnsTitleText = addOnsPopUp.GetTitleText();
-
-            Assert.IsTrue(addOnsTitleText.Length > 0);
+            Assert.IsTrue(addOnsPopUp.IsDisplayed());
         }
 
         [TearDown]

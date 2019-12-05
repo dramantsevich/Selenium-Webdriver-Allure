@@ -10,7 +10,7 @@ namespace PageFactory.Pages.PopUpObjects
         [CacheLookup]
         private IWebElement AddOnsFrame;
 
-        [FindsBy(How = How.XPath, Using = "//a[@class='h4Cscd']")]
+        [FindsBy(How = How.XPath, Using = "//div[@class='Sikpge']/a[@class='h4Cscd']")]
         [CacheLookup]
         private readonly IWebElement Title;
 
@@ -23,9 +23,15 @@ namespace PageFactory.Pages.PopUpObjects
         {
             webDriverWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//a[@class='h4Cscd']")));
 
-            string titleText = Title.GetAttribute("title");
+            return Title.GetAttribute("title");
+        }
 
-            return titleText;
+        public bool IsDisplayed()
+        {
+            if (Title.Displayed)
+                return true;
+            else
+                return false;
         }
     }
 }

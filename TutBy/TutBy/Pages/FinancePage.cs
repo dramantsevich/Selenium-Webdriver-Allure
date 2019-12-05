@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
-using System.Collections.Generic;
-using System;
+using AShotNet;
 
 namespace TutBy.Pages
 {
@@ -56,6 +55,8 @@ namespace TutBy.Pages
         public string GetCurrencyConverterSecondField()
         {
             string cash = CurrencyConverterSecondField.GetAttribute("value");
+            new AShot()
+                .TakeScreenshot(driver, CurrencyConverterSecondField);
 
             return cash;
         }

@@ -49,6 +49,8 @@ namespace PageFactory
         {
             string webSiteUrl = "https://gmail.com/";
 
+            this.driver.Manage().Window.Maximize();
+
             this.driver.Navigate().GoToUrl(webSiteUrl);
         }
 

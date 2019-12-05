@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 
@@ -24,7 +25,9 @@ namespace PageFactory.Pages
 
         public InboxGmailPage LoginClick()
         {
-            webDriverWait.Until(ExpectedConditions.ElementToBeClickable(NextButton)).Click();
+            Actions actions = new Actions(driver);
+
+            actions.MoveToElement(NextButton).Click().Build().Perform();
 
             return new InboxGmailPage(driver);
         }

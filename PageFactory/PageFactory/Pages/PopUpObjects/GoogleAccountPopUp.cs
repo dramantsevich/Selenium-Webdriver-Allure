@@ -9,7 +9,7 @@ namespace PageFactory.Pages.PopUpObjects
         [CacheLookup]
         private readonly IWebElement SignOutButton;
 
-        [FindsBy(How = How.XPath, Using = "//div[@class='gb_ob']")]
+        [FindsBy(How = How.XPath, Using = "//div[@class='gb_Md gb_3d gb_Ud']/div[5]/div[1]/div[2]/div[2]")]
         [CacheLookup]
         public IWebElement CurrentAccountMail { get; set; }
 

@@ -5,17 +5,26 @@ namespace PageFactory.Pages.PopUpObjects
 {
     public class ErrorMessagePopUp : Page
     {
-        [FindsBy(How = How.XPath, Using = "//div[@class='Kj-JD-K7 Kj-JD-K7-bsT']/span[1]")]
+        [FindsBy(How = How.XPath, Using = "//div[@class='Kj-JD']/div[@class='Kj-JD-K7 Kj-JD-K7-bsT']/span[1]")]
         [CacheLookup]
         private readonly IWebElement Title;
+
+        [FindsBy(How = How.XPath, Using = "//div[@class='Kj-JD']")]
+        private readonly IWebElement ErrorMessagePopupForm;
 
         public ErrorMessagePopUp(IWebDriver driver) : base(driver) { }
 
         public string GetTitleText()
         {
-            string titleText = Title.Text;
+            return Title.Text;
+        }
 
-            return titleText;
+        public bool IsDisplayd()
+        {
+            if (ErrorMessagePopupForm.Displayed)
+                return true;
+            else
+                return false;
         }
     }
 }
