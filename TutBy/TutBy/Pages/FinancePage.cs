@@ -1,5 +1,4 @@
-﻿using AShotNet.ScreenTaker;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SeleniumExtras.PageObjects;
 
 namespace TutBy.Pages
@@ -55,10 +54,6 @@ namespace TutBy.Pages
 
         public string GetCurrencyConverterSecondField()
         {
-            new AShotNet.AShot()
-                .ShootingStrategy(new ViewportPastingStrategy(10))
-                .TakeScreenshot(driver);
-
             return CurrencyConverterSecondField.GetAttribute("value");
         }
 

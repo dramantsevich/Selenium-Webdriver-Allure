@@ -3,7 +3,6 @@ using TutBy.Pages.Popups;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using Allure.Commons;
 
 namespace TutBy.Tests
 {
@@ -16,12 +15,6 @@ namespace TutBy.Tests
         protected LoginFormPopup authorizeFormPopup;
         protected string login;
         protected string password;
-
-        [OneTimeSetUp]
-        public void OneTimeSetup()
-        {
-            AllureLifecycle.Instance.CleanupResultDirectory();
-        }
 
         [SetUp]
         public void SetUp()
