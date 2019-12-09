@@ -33,6 +33,9 @@ namespace TutBy.Pages
         [CacheLookup]
         private readonly IWebElement TopBarLinkTutBy;
 
+        [FindsBy(How = How.XPath, Using = "//div[@class='col-2']//div[@class='b-equalwidgets']")]
+        public IWebElement WidgetsDiv { get; set; }
+
         private By currencyLocator;
         public FinancePage(IWebDriver driver) : base(driver) { }
 

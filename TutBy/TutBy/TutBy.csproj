@@ -21,9 +21,16 @@
     </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ashot-dotnet-master\ashot-dotnet-master\AShotNet\AShotNet.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <None Update="allureConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Screenshots\" />
   </ItemGroup>
 </Project>

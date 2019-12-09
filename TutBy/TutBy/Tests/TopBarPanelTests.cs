@@ -2,14 +2,14 @@
 using NUnit.Allure.Attributes;
 using NUnit.Allure.Core;
 using NUnit.Framework;
+using OpenQA.Selenium.Chrome;
 using TutBy.Pages;
 using TutBy.Pages.Popups;
 
 namespace TutBy.Tests
 {
     [TestFixture]
-    [AllureNUnit]
-    public class TopBarPanelTests : BeforeAndAfterTests
+    public class TopBarPanelTests : BaseTests
     {
         [Test]
         [AllureTag("TC-7")]
@@ -22,7 +22,10 @@ namespace TutBy.Tests
 
             ResourcePage resourcePage = topBarPanel.AllSectionsButtonClick();
 
-            Assert.IsTrue(resourcePage.IsDisplayed());
+            MakeScreenshotWhenFail(resourcePage.Logo, () =>
+            {
+                Assert.IsTrue(resourcePage.IsDisplayed());
+            });
         }
     }
 }

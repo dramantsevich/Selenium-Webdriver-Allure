@@ -3,13 +3,12 @@ using NUnit.Framework;
 using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
+using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
     [TestFixture]
-    [AllureDisplayIgnored]
-    [AllureNUnit]
-    public class FinancePageTests : BeforeAndAfterTests
+    public class FinancePageTests : BaseTests
     {
         [Test]
         [AllureTag("TC-1")]
@@ -22,12 +21,15 @@ namespace TutBy.Tests
 
             FinancePage financePage = homePage.OpenFinancePage();
 
-            financePage.SetCurrencyConverterFirstField(cashAmountFirstField);
-            financePage.SetCurrencyConverterFirstCurrency("USD");
+            MakeScreenshotWhenFail(financePage.WidgetsDiv, () =>
+            {
+                financePage.SetCurrencyConverterFirstField(cashAmountFirstField);
+                financePage.SetCurrencyConverterFirstCurrency("USD");
 
-            string cashAmountSecondField = financePage.GetCurrencyConverterSecondField();
+                string cashAmountSecondField = financePage.GetCurrencyConverterSecondField();
 
-            Assert.AreEqual(cashAmountFirstField, cashAmountSecondField);
+                Assert.AreEqual(cashAmountFirstField, cashAmountSecondField);
+            });
         }
     }
 }

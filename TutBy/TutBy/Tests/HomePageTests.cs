@@ -4,12 +4,12 @@ using NUnit.Framework;
 using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
+using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
     [TestFixture]
-    [AllureNUnit]
-    public class HomePageTests : BeforeAndAfterTests
+    public class HomePageTests : BaseTests
     {
         [Test]
         [AllureTag("TC-2")]
@@ -18,13 +18,18 @@ namespace TutBy.Tests
         [AllureSuite("HomePageTests")]
         public void StartTutBy_IsLogin()
         {
+            HomePage page = new HomePage(this.driver);
+
             this.authorizeFormPopup = homePage.OpenLoginForm();
             authorizeFormPopup.SetLogin(login);
             authorizeFormPopup.SetPassword(password);
 
             this.homePage = authorizeFormPopup.LoginButtonClick();
 
-            Assert.IsTrue(homePage.IsLoggedInAccount());
+            MakeScreenshotWhenFail(page.TopBar, () =>
+            {
+                Assert.IsTrue(homePage.IsLoggedInAccount());
+            });
         }
 
         [Test]
@@ -36,7 +41,10 @@ namespace TutBy.Tests
         {
             TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
 
-            Assert.IsTrue(topBarPanel.IsTopBarPanelOpen());
+            MakeScreenshotWhenFail(topBarPanel.TopBarMore, () =>
+            {
+                Assert.IsTrue(topBarPanel.IsTopBarPanelOpen());
+            });
         }
 
         [Test]
@@ -48,7 +56,10 @@ namespace TutBy.Tests
         {
             FinancePage financePage = homePage.OpenFinancePage();
 
-            Assert.IsTrue(financePage.IsDispayed());
+            MakeScreenshotWhenFail(financePage.WidgetsDiv, () =>
+            {
+                Assert.IsTrue(financePage.IsDispayed());
+            });
         }
     }
 }

@@ -7,7 +7,7 @@ namespace TutBy.Pages
     {
         [FindsBy(How = How.XPath, Using = "//a[@class='header-logo']")]
         [CacheLookup]
-        private readonly IWebElement Logo;
+        public IWebElement Logo { get; set; }
 
         public ResourcePage(IWebDriver driver) : base(driver) { }
         

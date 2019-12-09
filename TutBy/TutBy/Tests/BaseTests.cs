@@ -1,12 +1,19 @@
-﻿using TutBy.Pages;
-using TutBy.Pages.Popups;
+﻿using AShotNet;
+using AShotNet.Coordinates;
+using NUnit.Allure.Attributes;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System;
+using TutBy.Pages;
+using TutBy.Pages.Popups;
 
 namespace TutBy.Tests
 {
-    public class BeforeAndAfterTests
+    [AllureNUnit]
+    [AllureParentSuite("AllTests")]
+    public class BaseTests : ClearResultsDir
     {
         protected IWebDriver driver;
         protected BrowserController controller;
@@ -19,7 +26,6 @@ namespace TutBy.Tests
         [SetUp]
         public void SetUp()
         {
-
             this.driver = new ChromeDriver();
             this.controller = new BrowserController(this.driver);
 
@@ -29,6 +35,24 @@ namespace TutBy.Tests
             this.password = controller.GetPassword();
 
             this.homePage = new HomePage(this.driver);
+        }
+
+        protected void MakeScreenshotWhenFail(IWebElement webElement, Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch
+            {
+                string screenFolder = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\Screenshots";
+
+                new AShot()
+                    .CoordsProvider(new WebDriverCoordsProvider())
+                    .TakeScreenshot(driver)
+                    .getImage()
+                    .Save($@"{screenFolder}\{driver.Title}{DateTime.Now.ToString("HH_mm_ss")}.jpg");
+            }
         }
 
         [TearDown]

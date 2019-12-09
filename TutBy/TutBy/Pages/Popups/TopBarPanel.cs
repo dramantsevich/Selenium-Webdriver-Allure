@@ -13,6 +13,9 @@ namespace TutBy.Pages.Popups
         [CacheLookup]
         private readonly IWebElement AllSectionsButton;
 
+        [FindsBy(How = How.XPath, Using = "//div[@class='topbarmore-c']")]
+        public IWebElement TopBarMore { get; set; }
+
         public TopBarPanel(IWebDriver driver) : base(driver) { }
 
         public bool IsTopBarPanelOpen()

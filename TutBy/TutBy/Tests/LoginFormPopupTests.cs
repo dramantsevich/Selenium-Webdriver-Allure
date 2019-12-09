@@ -4,12 +4,12 @@ using NUnit.Framework;
 using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
+using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
     [TestFixture]
-    [AllureNUnit]
-    public class LoginFormPopupTests : BeforeAndAfterTests
+    public class LoginFormPopupTests : BaseTests
     {
         [Test]
         [AllureTag("TC-5")]
@@ -18,12 +18,15 @@ namespace TutBy.Tests
         [AllureSuite("LoginFormPopupTests")]
         public void LogoutFromAccount_IsLoginFormEnabled()
         {
-            SigninAccount();
+            MakeScreenshotWhenFail(homePage.Logo, () =>
+            {
+                SigninAccount();
 
-            this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
-            authorizeFormPopup.LogoutButtonClick();
+                this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
+                authorizeFormPopup.LogoutButtonClick();
 
-            Assert.IsTrue(homePage.IsLoginFormEnabled());
+                Assert.IsTrue(homePage.IsLoginFormEnabled());
+            });
         }
 
         [Test]
@@ -38,7 +41,10 @@ namespace TutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             SupportPage supportPage = authorizeFormPopup.ClickSupportButton();
 
-            Assert.IsTrue(supportPage.IsDisplayed());
+            MakeScreenshotWhenFail(supportPage.Header, () =>
+            {
+                Assert.IsTrue(supportPage.IsDisplayed());
+            });
         }
 
         [Test]
@@ -53,7 +59,10 @@ namespace TutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             ProfilePage profilePage = authorizeFormPopup.ClickProfileButton();
 
-            Assert.IsTrue(profilePage.IsDisplayed());
+            MakeScreenshotWhenFail(profilePage.Header, () =>
+            {
+                Assert.IsTrue(profilePage.IsDisplayed());
+            });
         }
 
         public void SigninAccount()

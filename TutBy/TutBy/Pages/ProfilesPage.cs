@@ -7,7 +7,7 @@ namespace TutBy.Pages
     {
         [FindsBy(How = How.XPath, Using = "//header[@class='row b-form__header']")]
         [CacheLookup]
-        private readonly IWebElement Header;
+        public IWebElement Header { get; set; }
 
         public ProfilePage(IWebDriver driver) : base(driver)
         {

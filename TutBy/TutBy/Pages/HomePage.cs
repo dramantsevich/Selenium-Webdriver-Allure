@@ -26,6 +26,12 @@ namespace TutBy.Pages
         [CacheLookup]
         private readonly IWebElement FinanceButton;
 
+        [FindsBy(How = How.XPath, Using = "//div[@class='b-topbar-h']")]
+        public IWebElement TopBar { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//a[@class='header-logo']")]
+        public IWebElement Logo { get; set; }
+
         public HomePage(IWebDriver driver) : base(driver) { }
 
         public LoginFormPopup OpenLoginForm()
