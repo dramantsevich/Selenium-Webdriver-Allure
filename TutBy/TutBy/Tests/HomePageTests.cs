@@ -1,10 +1,8 @@
 ﻿using TutBy.Pages;
 using TutBy.Pages.Popups;
 using NUnit.Framework;
-using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
-using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
@@ -26,7 +24,7 @@ namespace TutBy.Tests
 
             this.homePage = authorizeFormPopup.LoginButtonClick();
 
-            MakeScreenshotWhenFail(page.TopBar, () =>
+            MakeScreenshotWhenFail(() =>
             {
                 Assert.IsTrue(homePage.IsLoggedInAccount());
             });
@@ -41,9 +39,9 @@ namespace TutBy.Tests
         {
             TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
 
-            MakeScreenshotWhenFail(topBarPanel.TopBarMore, () =>
+            MakeScreenshotWhenFail( () =>
             {
-                Assert.IsTrue(topBarPanel.IsTopBarPanelOpen());
+                Assert.IsTrue(topBarPanel.IsTopBarPanelDisplayed());
             });
         }
 
@@ -56,9 +54,9 @@ namespace TutBy.Tests
         {
             FinancePage financePage = homePage.OpenFinancePage();
 
-            MakeScreenshotWhenFail(financePage.WidgetsDiv, () =>
+            MakeScreenshotWhenFail(() =>
             {
-                Assert.IsTrue(financePage.IsDispayed());
+                Assert.IsTrue(financePage.IsEqualWidgetsDispayed());
             });
         }
     }

@@ -7,7 +7,11 @@ namespace TutBy.Pages
     {
         [FindsBy(How = How.XPath, Using = "//a[@class='header-logo']")]
         [CacheLookup]
-        public IWebElement Logo { get; set; }
+        private readonly IWebElement Logo;
+
+        [FindsBy(How = How.XPath, Using = "//div[@class='l-col main-content inner-page-content']//div[@class='l-col-i']")]
+        [CacheLookup]
+        private readonly IWebElement PortalSections;
 
         public ResourcePage(IWebDriver driver) : base(driver) { }
         
@@ -18,9 +22,9 @@ namespace TutBy.Pages
             return new HomePage(this.driver);
         }
 
-        public bool IsDisplayed()
+        public bool IsPortalSectionsDisplayed()
         {
-            if (Logo.Displayed)
+            if (PortalSections.Displayed)
                 return true;
             else
                 return false;

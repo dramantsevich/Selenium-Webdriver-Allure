@@ -1,4 +1,5 @@
-﻿using AShotNet;
+﻿using Allure.Commons;
+using AShotNet;
 using AShotNet.Coordinates;
 using NUnit.Allure.Attributes;
 using NUnit.Allure.Core;
@@ -13,7 +14,7 @@ namespace TutBy.Tests
 {
     [AllureNUnit]
     [AllureParentSuite("AllTests")]
-    public class BaseTests : ClearResultsDir
+    public class BaseTests
     {
         protected IWebDriver driver;
         protected BrowserController controller;
@@ -37,7 +38,8 @@ namespace TutBy.Tests
             this.homePage = new HomePage(this.driver);
         }
 
-        protected void MakeScreenshotWhenFail(IWebElement webElement, Action action)
+        
+        protected void MakeScreenshotWhenFail(Action action)
         {
             try
             {
@@ -46,12 +48,16 @@ namespace TutBy.Tests
             catch
             {
                 string screenFolder = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\Screenshots";
+                string screenName = $"{DateTime.Now.ToString("HH_mm_ss")}{driver.Title}.jpg";
+                string fullPath = $@"{screenFolder}\{screenName}";
 
                 new AShot()
                     .CoordsProvider(new WebDriverCoordsProvider())
                     .TakeScreenshot(driver)
                     .getImage()
-                    .Save($@"{screenFolder}\{driver.Title}{DateTime.Now.ToString("HH_mm_ss")}.jpg");
+                    .Save(fullPath);
+
+                AllureLifecycle.Instance.AddAttachment("Screen", "Screenshot", fullPath);
             }
         }
 

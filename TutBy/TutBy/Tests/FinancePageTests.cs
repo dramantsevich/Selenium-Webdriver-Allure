@@ -1,9 +1,7 @@
 ﻿using TutBy.Pages;
 using NUnit.Framework;
-using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
-using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
@@ -21,7 +19,7 @@ namespace TutBy.Tests
 
             FinancePage financePage = homePage.OpenFinancePage();
 
-            MakeScreenshotWhenFail(financePage.WidgetsDiv, () =>
+            MakeScreenshotWhenFail(() =>
             {
                 financePage.SetCurrencyConverterFirstField(cashAmountFirstField);
                 financePage.SetCurrencyConverterFirstCurrency("USD");

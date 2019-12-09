@@ -26,11 +26,9 @@ namespace TutBy.Pages
         [CacheLookup]
         private readonly IWebElement FinanceButton;
 
-        [FindsBy(How = How.XPath, Using = "//div[@class='b-topbar-h']")]
-        public IWebElement TopBar { get; set; }
-
-        [FindsBy(How = How.XPath, Using = "//a[@class='header-logo']")]
-        public IWebElement Logo { get; set; }
+        [FindsBy(How = How.XPath, Using = "//div[@id='title_news_block']")]
+        [CacheLookup]
+        private readonly IWebElement NewsBlock;
 
         public HomePage(IWebDriver driver) : base(driver) { }
 
@@ -78,9 +76,9 @@ namespace TutBy.Pages
             return new FinancePage(this.driver);
         }
 
-        public bool IsDisplayed()
+        public bool IsNewsBlockDisplayed()
         {
-            if (FinanceButton.Displayed)
+            if (NewsBlock.Displayed)
                 return true;
             else
                 return false;

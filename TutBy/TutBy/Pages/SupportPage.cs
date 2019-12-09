@@ -5,18 +5,18 @@ namespace TutBy.Pages
 {
     public class SupportPage : Page
     {
-        [FindsBy(How = How.XPath, Using = "//header[@class='row b-form__header']")]
+        [FindsBy(How = How.XPath, Using = "//form[@class='b-form']")]
         [CacheLookup]
-        public IWebElement Header { get; set; }
+        private readonly IWebElement FAQForm;
 
         public SupportPage(IWebDriver driver) : base(driver) 
         {
             SwitchToSupportPage(driver);
         }
     
-        public bool IsDisplayed()
+        public bool IsFAQFormDisplayed()
         {
-            if (Header.Displayed)
+            if (FAQForm.Displayed)
                 return true;
             else
                 return false;

@@ -1,10 +1,7 @@
 ﻿using TutBy.Pages;
-using TutBy.Pages.Popups;
 using NUnit.Framework;
-using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
-using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
@@ -18,7 +15,7 @@ namespace TutBy.Tests
         [AllureSuite("LoginFormPopupTests")]
         public void LogoutFromAccount_IsLoginFormEnabled()
         {
-            MakeScreenshotWhenFail(homePage.Logo, () =>
+            MakeScreenshotWhenFail(() =>
             {
                 SigninAccount();
 
@@ -41,9 +38,9 @@ namespace TutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             SupportPage supportPage = authorizeFormPopup.ClickSupportButton();
 
-            MakeScreenshotWhenFail(supportPage.Header, () =>
+            MakeScreenshotWhenFail(() =>
             {
-                Assert.IsTrue(supportPage.IsDisplayed());
+                Assert.IsTrue(supportPage.IsFAQFormDisplayed());
             });
         }
 
@@ -59,9 +56,9 @@ namespace TutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             ProfilePage profilePage = authorizeFormPopup.ClickProfileButton();
 
-            MakeScreenshotWhenFail(profilePage.Header, () =>
+            MakeScreenshotWhenFail(() =>
             {
-                Assert.IsTrue(profilePage.IsDisplayed());
+                Assert.IsTrue(profilePage.IsFormSectionInputFieldsEnabled());
             });
         }
 

@@ -1,10 +1,8 @@
 ﻿using TutBy.Pages;
 using NUnit.Framework;
 using TutBy.Pages.Popups;
-using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
-using OpenQA.Selenium.Chrome;
 
 namespace TutBy.Tests
 {
@@ -15,10 +13,10 @@ namespace TutBy.Tests
         [AllureTag("TC-8")]
         [AllureSeverity(SeverityLevel.minor)]
         [AllureOwner("Ramantsevich Dzmitry")]
-        [AllureSuite("LoginFormPopupTests")]
+        [AllureSuite("ResourcePageTests")]
         public void LogoClick_IsHomePageOpen()
         {
-            MakeScreenshotWhenFail(homePage.Logo, () =>
+            MakeScreenshotWhenFail(() =>
             {
                 TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
 
@@ -26,7 +24,7 @@ namespace TutBy.Tests
 
                 HomePage pageHome = resourcePage.LogoClick();
 
-                Assert.IsTrue(pageHome.IsDisplayed());
+                Assert.IsTrue(pageHome.IsNewsBlockDisplayed());
             });
         } 
     }

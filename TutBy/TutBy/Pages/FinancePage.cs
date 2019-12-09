@@ -29,12 +29,10 @@ namespace TutBy.Pages
         [CacheLookup]
         private readonly IWebElement CurrencyConverterSecondDropDownMenuTd;
 
-        [FindsBy(How = How.XPath, Using = "//div[@id='mainmenu']//ul[@class='b-topbar-i']//li[2]/a[contains(text(),'TUT.BY')]")]
-        [CacheLookup]
-        private readonly IWebElement TopBarLinkTutBy;
-
         [FindsBy(How = How.XPath, Using = "//div[@class='col-2']//div[@class='b-equalwidgets']")]
-        public IWebElement WidgetsDiv { get; set; }
+        [CacheLookup]
+        private readonly IWebElement EqualWidgets;
+
 
         private By currencyLocator;
         public FinancePage(IWebDriver driver) : base(driver) { }
@@ -80,9 +78,9 @@ namespace TutBy.Pages
             currencyButton.Click();
         }
 
-        public bool IsDispayed()
+        public bool IsEqualWidgetsDispayed()
         {
-            if (TopBarLinkTutBy.Displayed)
+            if (EqualWidgets.Displayed)
                 return true;
             else
                 return false;
