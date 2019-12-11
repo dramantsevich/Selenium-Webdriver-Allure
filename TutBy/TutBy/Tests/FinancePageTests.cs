@@ -2,7 +2,8 @@
 using NUnit.Framework;
 using NUnit.Allure.Attributes;
 using Allure.Commons;
-using NUnit.Framework.Interfaces;
+using System;
+using System.IO;
 
 namespace TutBy.Tests
 {
@@ -20,12 +21,12 @@ namespace TutBy.Tests
 
             FinancePage financePage = homePage.OpenFinancePage();
 
-                financePage.SetCurrencyConverterFirstField(cashAmountFirstField);
-                financePage.SetCurrencyConverterFirstCurrency("USD");
+            financePage.SetCurrencyConverterFirstField(cashAmountFirstField);
+            financePage.SetCurrencyConverterFirstCurrency("USD");
 
-                string cashAmountSecondField = financePage.GetCurrencyConverterSecondField();
+            string cashAmountSecondField = financePage.GetCurrencyConverterSecondField();
 
-                Assert.AreEqual(1, cashAmountSecondField);
+            Assert.AreEqual(cashAmountFirstField, cashAmountSecondField);
         }
     }
 }

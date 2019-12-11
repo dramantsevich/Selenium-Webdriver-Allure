@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,11 +63,6 @@ namespace TutBy
         public void CloseCurrentWindow()
         {
             this.driver.Close();
-        }
-
-        public void CloseAllWindows()
-        {
-            this.driver.Quit();
         }
     }
 }
