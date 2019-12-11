@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tTutBy", "tTutBy\tTutBy.csproj", "{B534F3E7-18FF-4214-BEFF-A5A00B16EBD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AShotNet", "D:\ashot-dotnet-master\ashot-dotnet-master\AShotNet\AShotNet.csproj", "{C1042932-561C-4E1F-99A6-DF3AEFF01DD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B534F3E7-18FF-4214-BEFF-A5A00B16EBD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B534F3E7-18FF-4214-BEFF-A5A00B16EBD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B534F3E7-18FF-4214-BEFF-A5A00B16EBD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B534F3E7-18FF-4214-BEFF-A5A00B16EBD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1042932-561C-4E1F-99A6-DF3AEFF01DD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1042932-561C-4E1F-99A6-DF3AEFF01DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1042932-561C-4E1F-99A6-DF3AEFF01DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1042932-561C-4E1F-99A6-DF3AEFF01DD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58DEC8F8-51B1-4267-8E2B-C9FF3B89CACB}
+	EndGlobalSection
+EndGlobal
