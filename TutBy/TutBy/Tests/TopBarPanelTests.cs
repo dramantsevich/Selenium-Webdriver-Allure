@@ -19,11 +19,8 @@ namespace TutBy.Tests
             TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
 
             ResourcePage resourcePage = topBarPanel.AllSectionsButtonClick();
-
-            MakeScreenshotWhenFail(() =>
-            {
-                Assert.IsTrue(resourcePage.IsPortalSectionsDisplayed());
-            });
+            
+            Assert.IsTrue(resourcePage.IsPortalSectionsDisplayed());
         }
     }
 }

@@ -4,6 +4,7 @@ using AShotNet.Coordinates;
 using NUnit.Allure.Attributes;
 using NUnit.Allure.Core;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -38,32 +39,29 @@ namespace TutBy.Tests
             this.homePage = new HomePage(this.driver);
         }
 
-        
-        protected void MakeScreenshotWhenFail(Action action)
+        public void MakeScreenshot()
         {
-            try
-            {
-                action();
-            }
-            catch
-            {
-                string screenFolder = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\Screenshots";
-                string screenName = $"{DateTime.Now.ToString("HH_mm_ss")}{driver.Title}.jpg";
-                string fullPath = $@"{screenFolder}\{screenName}";
+            string screenFolder = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\Screenshots";
+            string screenName = $"{DateTime.Now.ToString("HH_mm_ss")}{driver.Title}.jpg";
+            string fullPath = $@"{screenFolder}\{screenName}";
 
-                new AShot()
-                    .CoordsProvider(new WebDriverCoordsProvider())
-                    .TakeScreenshot(driver)
-                    .getImage()
-                    .Save(fullPath);
+            new AShot()
+             .CoordsProvider(new WebDriverCoordsProvider())
+             .TakeScreenshot(driver)
+             .getImage()
+             .Save(fullPath);
 
-                AllureLifecycle.Instance.AddAttachment("Screen", "Screenshot", fullPath);
-            }
+            AllureLifecycle.Instance.AddAttachment("Screen", "Screenshot", fullPath);
         }
 
         [TearDown]
         public void TearDown()
         {
+            if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+            {
+                MakeScreenshot();
+            }
+
             controller.CloseAllWindows();
         }
     }

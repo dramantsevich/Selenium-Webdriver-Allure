@@ -16,16 +16,13 @@ namespace TutBy.Tests
         [AllureSuite("ResourcePageTests")]
         public void LogoClick_IsHomePageOpen()
         {
-            MakeScreenshotWhenFail(() =>
-            {
-                TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
+            TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
 
-                ResourcePage resourcePage = topBarPanel.AllSectionsButtonClick();
+            ResourcePage resourcePage = topBarPanel.AllSectionsButtonClick();
 
-                HomePage pageHome = resourcePage.LogoClick();
+            HomePage pageHome = resourcePage.LogoClick();
 
-                Assert.IsTrue(pageHome.IsNewsBlockDisplayed());
-            });
+            Assert.IsTrue(pageHome.IsNewsBlockDisplayed());
         } 
     }
 }

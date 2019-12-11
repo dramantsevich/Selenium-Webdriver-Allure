@@ -23,11 +23,8 @@ namespace TutBy.Tests
             authorizeFormPopup.SetPassword(password);
 
             this.homePage = authorizeFormPopup.LoginButtonClick();
-
-            MakeScreenshotWhenFail(() =>
-            {
-                Assert.IsTrue(homePage.IsLoggedInAccount());
-            });
+            
+            Assert.IsTrue(homePage.IsLoggedInAccount());
         }
 
         [Test]
@@ -38,11 +35,8 @@ namespace TutBy.Tests
         public void OpenTopBarPanel_IsOpenTopBarPanel()
         {
             TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
-
-            MakeScreenshotWhenFail( () =>
-            {
-                Assert.IsTrue(topBarPanel.IsTopBarPanelDisplayed());
-            });
+            
+            Assert.IsTrue(topBarPanel.IsTopBarPanelDisplayed());
         }
 
         [Test]
@@ -53,11 +47,8 @@ namespace TutBy.Tests
         public void OpenFinancePage_IsOpenFinancePage()
         {
             FinancePage financePage = homePage.OpenFinancePage();
-
-            MakeScreenshotWhenFail(() =>
-            {
-                Assert.IsTrue(financePage.IsEqualWidgetsDispayed());
-            });
+            
+            Assert.IsTrue(financePage.IsEqualWidgetsDispayed());
         }
     }
 }

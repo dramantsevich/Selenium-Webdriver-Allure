@@ -15,15 +15,12 @@ namespace TutBy.Tests
         [AllureSuite("LoginFormPopupTests")]
         public void LogoutFromAccount_IsLoginFormEnabled()
         {
-            MakeScreenshotWhenFail(() =>
-            {
-                SigninAccount();
+            SigninAccount();
 
-                this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
-                authorizeFormPopup.LogoutButtonClick();
+            this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
+            authorizeFormPopup.LogoutButtonClick();
 
-                Assert.IsTrue(homePage.IsLoginFormEnabled());
-            });
+            Assert.IsTrue(homePage.IsLoginFormEnabled());
         }
 
         [Test]
@@ -38,10 +35,7 @@ namespace TutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             SupportPage supportPage = authorizeFormPopup.ClickSupportButton();
 
-            MakeScreenshotWhenFail(() =>
-            {
-                Assert.IsTrue(supportPage.IsFAQFormDisplayed());
-            });
+            Assert.IsTrue(supportPage.IsFAQFormDisplayed());
         }
 
         [Test]
@@ -56,10 +50,7 @@ namespace TutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             ProfilePage profilePage = authorizeFormPopup.ClickProfileButton();
 
-            MakeScreenshotWhenFail(() =>
-            {
-                Assert.IsTrue(profilePage.IsFormSectionInputFieldsEnabled());
-            });
+            Assert.IsTrue(profilePage.IsFormSectionInputFieldsEnabled());
         }
 
         public void SigninAccount()
