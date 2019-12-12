@@ -1,0 +1,83 @@
+{
+  "uuid": "e9a6a3b3-5b29-463b-8e81-c3d43e912694-tr-0-1004",
+  "historyId": "tTutBy.Tests.HomePageTests.OpenTopBarPanel_IsOpenTopBarPanel",
+  "fullName": "tTutBy.Tests.HomePageTests.OpenTopBarPanel_IsOpenTopBarPanel",
+  "labels": [
+    {
+      "name": "thread",
+      "value": "NonParallelWorker"
+    },
+    {
+      "name": "host",
+      "value": "WSA-039-71"
+    },
+    {
+      "name": "testClass",
+      "value": "tTutBy.Tests.HomePageTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "OpenTopBarPanel_IsOpenTopBarPanel"
+    },
+    {
+      "name": "package",
+      "value": "tTutBy.Tests.HomePageTests"
+    },
+    {
+      "name": "tag",
+      "value": "TC-3"
+    },
+    {
+      "name": "severity",
+      "value": "minor"
+    },
+    {
+      "name": "owner",
+      "value": "Ramantsevich Dzmitry"
+    },
+    {
+      "name": "suite",
+      "value": "HomePageTests"
+    },
+    {
+      "name": "parentSuite",
+      "value": "AllTests"
+    }
+  ],
+  "links": [],
+  "name": "OpenTopBarPanel_IsOpenTopBarPanel",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false
+  },
+  "stage": "finished",
+  "steps": [
+    {
+      "name": "OpenTopBarPanel_IsOpenTopBarPanel",
+      "status": "passed",
+      "statusDetails": {
+        "known": false,
+        "muted": false,
+        "flaky": false
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [
+        {
+          "name": "Console Output",
+          "source": "1ade84186c9b4191bcd68a802f05f8ff-attachment.txt",
+          "type": "text/plain"
+        }
+      ],
+      "parameters": [],
+      "start": 1576142670748,
+      "stop": 1576142678258
+    }
+  ],
+  "attachments": [],
+  "parameters": [],
+  "start": 1576142670748,
+  "stop": 1576142678259
+}

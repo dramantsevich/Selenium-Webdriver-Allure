@@ -1,0 +1,2 @@
+2019-12-12 12:40:50,167 [NonParallelWorker] INFO  tTutBy.TestListener [(null)] - IsChangedDropDownMenuCurrency_AreEqual
+2019-12-12 12:40:57,917 [NonParallelWorker] INFO  tTutBy.TestListener [(null)] - TestSuccess

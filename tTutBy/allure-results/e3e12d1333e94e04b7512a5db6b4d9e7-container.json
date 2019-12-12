@@ -1,0 +1,44 @@
+{
+  "uuid": "258feb3c-cbb2-4262-9cd2-7b7fc2b6ed60-tc-0-1000",
+  "name": "tTutBy.Tests.FinancePageTests.IsChangedDropDownMenuCurrency_AreEqual",
+  "children": [
+    "d8a6e2de-036b-4f42-8724-a230ce97b22b-tr-0-1001"
+  ],
+  "befores": [
+    {
+      "name": "SetUp",
+      "status": "passed",
+      "statusDetails": {
+        "known": false,
+        "muted": false,
+        "flaky": false
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1576143658228,
+      "stop": 1576143658228
+    }
+  ],
+  "afters": [
+    {
+      "name": "TearDown",
+      "status": "passed",
+      "statusDetails": {
+        "known": false,
+        "muted": false,
+        "flaky": false
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1576143658232,
+      "stop": 1576143658232
+    }
+  ],
+  "links": [],
+  "start": 1576143639935,
+  "stop": 1576143658367
+}

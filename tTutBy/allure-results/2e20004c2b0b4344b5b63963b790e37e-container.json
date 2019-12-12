@@ -1,0 +1,44 @@
+{
+  "uuid": "436b7d7a-a444-41c6-b3b0-db971f5d58c9-tc-0-1002",
+  "name": "tTutBy.Tests.HomePageTests.StartTutBy_IsLogin",
+  "children": [
+    "87b6f353-6c72-4ba7-a9a3-c869fff166c5-tr-0-1003"
+  ],
+  "befores": [
+    {
+      "name": "SetUp",
+      "status": "passed",
+      "statusDetails": {
+        "known": false,
+        "muted": false,
+        "flaky": false
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1576142689075,
+      "stop": 1576142689075
+    }
+  ],
+  "afters": [
+    {
+      "name": "TearDown",
+      "status": "passed",
+      "statusDetails": {
+        "known": false,
+        "muted": false,
+        "flaky": false
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1576142689075,
+      "stop": 1576142689075
+    }
+  ],
+  "links": [],
+  "start": 1576142678261,
+  "stop": 1576142689077
+}

@@ -1,4 +1,5 @@
-﻿using NUnit.Allure.Attributes;
+﻿using log4net.Config;
+using NUnit.Allure.Attributes;
 using NUnit.Allure.Core;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -33,6 +34,8 @@ namespace tTutBy.Tests
             this.password = controller.GetPassword();
 
             this.homePage = new HomePage(this.driver);
+
+            log.Info(TestContext.CurrentContext.Test.MethodName + "starting");
         }
 
         [TearDown]
@@ -40,7 +43,7 @@ namespace tTutBy.Tests
         {
             if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
                 TestListener.OnTestFailure();
-
+            
             if (TestContext.CurrentContext.Result.Outcome == ResultState.Success)
                 TestListener.OnTestSuccess();
 

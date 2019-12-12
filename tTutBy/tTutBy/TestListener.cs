@@ -32,7 +32,6 @@ namespace tTutBy
             string screenFolder = AppDomain.CurrentDomain.BaseDirectory + @"..\..\..\Screenshots";
             string screenName = $"{DateTime.Now.ToString("HH_mm_ss")}{DriverSingleton.GetDriver().Title}.jpg";
             string fullPath = $@"{screenFolder}\{screenName}";
-            Directory.CreateDirectory(screenFolder);
 
             new AShot()
              .CoordsProvider(new WebDriverCoordsProvider())

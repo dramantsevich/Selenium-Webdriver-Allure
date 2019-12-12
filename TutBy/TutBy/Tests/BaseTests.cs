@@ -39,10 +39,11 @@ namespace TutBy.Tests
         [TearDown]
         public void TearDown()
         {
-            if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
-            {
+            if (TestContext.CurrentContext.Result.Outcome == ResultState.Failure)
+                TestListener.OnTestFailure();
 
-            }
+            if (TestContext.CurrentContext.Result.Outcome == ResultState.Success)
+                TestListener.OnTestSuccess();
 
             DriverSingleton.CloseDriver();
         }
