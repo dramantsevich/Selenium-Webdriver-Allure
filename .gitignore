@@ -12,9 +12,9 @@
 [Rr]elease/
 x64/
 x86/
+[Aa]llure-results/
 [Ll]og/
 [Ll]ogs/
-[Aa]llure-results/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
