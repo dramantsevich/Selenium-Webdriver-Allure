@@ -1,8 +1,8 @@
 ﻿using tTutBy.Pages;
 using NUnit.Framework;
-using NUnit.Allure.Attributes;
+using Allure.Commons.Model;
+using Allure.NUnit.Attributes;
 using Allure.Commons;
-
 
 namespace tTutBy.Tests
 {
@@ -11,9 +11,9 @@ namespace tTutBy.Tests
     {
         [Test]
         [AllureTag("TC-5")]
-        [AllureSeverity(SeverityLevel.critical)]
+        [AllureSeverity(SeverityLevel.Critical)]
         [AllureOwner("Ramantsevich Dzmitry")]
-        [AllureSuite("LoginFormPopupTests")]
+        [AllureSubSuite("LoginFormPopupTests")]
         public void LogoutFromAccount_IsLoginFormEnabled()
         {
             SigninAccount();
@@ -21,14 +21,14 @@ namespace tTutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             authorizeFormPopup.LogoutButtonClick();
 
-            Assert.IsTrue(homePage.IsLoginFormEnabled());
+            AllureLifecycle.Instance.Verify.That("Login form enabled", () => homePage.IsLoginFormEnabled(), Is.True);
         }
 
         [Test]
         [AllureTag("TC-6")]
-        [AllureSeverity(SeverityLevel.minor)]
+        [AllureSeverity(SeverityLevel.Minor)]
         [AllureOwner("Ramantsevich Dzmitry")]
-        [AllureSuite("LoginFormPopupTests")]
+        [AllureSubSuite("LoginFormPopupTests")]
         public void ClickSupportButton_IsOpenSupportPage()
         {
             SigninAccount();
@@ -36,14 +36,14 @@ namespace tTutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             SupportPage supportPage = authorizeFormPopup.ClickSupportButton();
 
-            Assert.IsTrue(supportPage.IsFAQFormDisplayed());
+            AllureLifecycle.Instance.Verify.That("FAQ form displayed", () => supportPage.IsFAQFormDisplayed(), Is.True);
         }
 
         [Test]
         [AllureTag("TC-7")]
-        [AllureSeverity(SeverityLevel.minor)]
+        [AllureSeverity(SeverityLevel.Minor)]
         [AllureOwner("Ramantsevich Dzmitry")]
-        [AllureSuite("LoginFormPopupTests")]
+        [AllureSubSuite("LoginFormPopupTests")]
         public void ClickProfileButton_IsOpenProfilesPage()
         {
             SigninAccount();
@@ -51,16 +51,19 @@ namespace tTutBy.Tests
             this.authorizeFormPopup = homePage.OpenLogedinAccountForm();
             ProfilePage profilePage = authorizeFormPopup.ClickProfileButton();
 
-            Assert.IsTrue(profilePage.IsFormSectionInputFieldsEnabled());
+            AllureLifecycle.Instance.Verify.That("Form section input fields enabled", () => profilePage.IsFormSectionInputFieldsEnabled(), Is.True);
         }
 
         public void SigninAccount()
         {
-            this.authorizeFormPopup = homePage.OpenLoginForm();
-            authorizeFormPopup.SetLogin(login);
-            authorizeFormPopup.SetPassword(password);
+            AllureLifecycle.Instance.RunStep("Sign in account", () =>
+            {
+                this.authorizeFormPopup = homePage.OpenLoginForm();
+                authorizeFormPopup.SetLogin(login);
+                authorizeFormPopup.SetPassword(password);
 
-            this.homePage = authorizeFormPopup.LoginButtonClick();
+                this.homePage = authorizeFormPopup.LoginButtonClick();
+            });
         }
     }
 }

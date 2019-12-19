@@ -1,6 +1,8 @@
 ﻿using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium;
 using tTutBy.Pages.Popups;
+using Allure.NUnit.Attributes;
+using Allure.Commons;
 
 namespace tTutBy.Pages
 {
@@ -34,14 +36,20 @@ namespace tTutBy.Pages
 
         public LoginFormPopup OpenLoginForm()
         {
-            LoginForm.Click();
+            AllureLifecycle.Instance.RunStep("Open login form(click to login button)", () =>
+            {
+                LoginForm.Click();
+            });
 
             return new LoginFormPopup(driver);
         }
 
         public LoginFormPopup OpenLogedinAccountForm()
         {
-            LogedinAccountForm.Click();
+            AllureLifecycle.Instance.RunStep("Open loged in account form(click to loged in button)", () =>
+            {
+                LogedinAccountForm.Click();
+            });
 
             return new LoginFormPopup(driver);
         }
@@ -64,14 +72,20 @@ namespace tTutBy.Pages
 
         public TopBarPanel OpenTopBarPanel()
         {
-            TopBarPanelButton.Click();
+            AllureLifecycle.Instance.RunStep("Open top bar panel(click to top bar panel)", () =>
+            {
+                TopBarPanelButton.Click();
+            });
 
             return new TopBarPanel(this.driver);
         }
 
         public FinancePage OpenFinancePage()
         {
-            FinanceButton.Click();
+            AllureLifecycle.Instance.RunStep("Open finance page(click to finance button)", () =>
+            {
+                FinanceButton.Click();
+            });
 
             return new FinancePage(this.driver);
         }

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Commons;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace tTutBy.Pages
@@ -17,7 +18,10 @@ namespace tTutBy.Pages
 
         public HomePage LogoClick()
         {
-            Logo.Click();
+            AllureLifecycle.Instance.RunStep("Open home page(click to logo)", () =>
+            {
+                Logo.Click();
+            });
 
             return new HomePage(this.driver);
         }

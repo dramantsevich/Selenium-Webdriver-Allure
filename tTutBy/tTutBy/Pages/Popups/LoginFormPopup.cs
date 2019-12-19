@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Commons;
+using Allure.NUnit.Attributes;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace tTutBy.Pages.Popups
@@ -33,38 +35,57 @@ namespace tTutBy.Pages.Popups
 
         public void SetLogin(string login)
         {
-            LoginField.SendKeys(login);
+            AllureLifecycle.Instance.RunStep("Set login(set data in first field)", () =>
+            {
+                LoginField.SendKeys(login);
+            }, login);
         }
 
+        [AllureHideParams]
         public void SetPassword(string password)
         {
-            PasswordField.SendKeys(password);
+            AllureLifecycle.Instance.RunStep("Set password(set data in second field)", () =>
+            {
+                PasswordField.SendKeys(password);
+            }, password);
         }
 
         public HomePage LoginButtonClick()
         {
-            LoginButton.Click();
+            AllureLifecycle.Instance.RunStep("Go back to HomePage(click to login button)", () =>
+            {
+                LoginButton.Click();
+            });
 
             return new HomePage(driver);
         }
 
         public HomePage LogoutButtonClick()
         {
-            LogoutButton.Click();
+            AllureLifecycle.Instance.RunStep("Logout from account(click to logout button)", () =>
+            {
+                LogoutButton.Click();
+            });
 
             return new HomePage(driver);
         }
 
         public SupportPage ClickSupportButton()
         {
-            SupportButton.Click();
+            AllureLifecycle.Instance.RunStep("Open support page(click to support button)", () =>
+            {
+                SupportButton.Click();
+            });
 
             return new SupportPage(this.driver);
         }
 
         public ProfilePage ClickProfileButton()
         {
-            ProfileButton.Click();
+            AllureLifecycle.Instance.RunStep("Open profile page(click to profile button)", () => 
+            {
+                ProfileButton.Click();
+            });
 
             return new ProfilePage(this.driver);
         }

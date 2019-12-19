@@ -1,6 +1,7 @@
 ﻿using tTutBy.Pages;
 using NUnit.Framework;
-using NUnit.Allure.Attributes;
+using Allure.Commons.Model;
+using Allure.NUnit.Attributes;
 using Allure.Commons;
 
 namespace tTutBy.Tests
@@ -10,9 +11,9 @@ namespace tTutBy.Tests
     {
         [Test]
         [AllureTag("TC-1")]
-        [AllureSeverity(SeverityLevel.critical)]
+        [AllureSeverity(SeverityLevel.Critical)]
         [AllureOwner("Ramantsevich Dzmitry")]
-        [AllureSuite("FinancePageTests")]
+        [AllureSubSuite("FinancePageTests")]
         public void IsChangedDropDownMenuCurrency_AreEqual()
         {
             string cashAmountFirstField = "4.26";
@@ -22,9 +23,7 @@ namespace tTutBy.Tests
             financePage.SetCurrencyConverterFirstField(cashAmountFirstField);
             financePage.SetCurrencyConverterFirstCurrency("USD");
 
-            string cashAmountSecondField = financePage.GetCurrencyConverterSecondField();
-
-            Assert.AreEqual(cashAmountFirstField, cashAmountSecondField);
+            AllureLifecycle.Instance.Verify.That($"cash in first field: {cashAmountFirstField} should correspond to cash in second field: {financePage.GetCurrencyConverterSecondField()}", cashAmountFirstField, Is.EqualTo(financePage.GetCurrencyConverterSecondField()));
         }
     }
 }

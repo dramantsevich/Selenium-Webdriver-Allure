@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
-[assembly: log4net.Config.XmlConfigurator]
 
 [assembly: Guid("b534f3e7-18ff-4214-beff-a5a00b16ebd6")]
 

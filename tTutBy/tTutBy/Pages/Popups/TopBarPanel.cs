@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Commons;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace tTutBy.Pages.Popups
@@ -25,7 +26,10 @@ namespace tTutBy.Pages.Popups
 
         public ResourcePage AllSectionsButtonClick()
         {
-            AllSectionsButton.Click();
+            AllureLifecycle.Instance.RunStep("Open all sections(click to all sections button)", () =>
+            {
+                AllSectionsButton.Click();
+            });
 
             return new ResourcePage(this.driver);
         }

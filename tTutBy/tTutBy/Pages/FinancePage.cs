@@ -1,5 +1,9 @@
-﻿using OpenQA.Selenium;
+﻿using Allure.Commons;
+using Allure.Commons.Model;
+using Allure.NUnit.Attributes;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System;
 
 namespace tTutBy.Pages
 {
@@ -39,8 +43,11 @@ namespace tTutBy.Pages
 
         public void SetCurrencyConverterFirstField(string cash)
         {
-            CurrencyConverterFirstField.Clear();
-            CurrencyConverterFirstField.SendKeys(cash);
+            AllureLifecycle.Instance.RunStep("Set cash in first field of the currency converter", () =>
+            {
+                CurrencyConverterFirstField.Clear();
+                CurrencyConverterFirstField.SendKeys(cash);
+            }, cash);
         }
 
         public string GetCurrencyConverterFirstField()
@@ -55,17 +62,25 @@ namespace tTutBy.Pages
 
         public string GetCurrencyConverterSecondField()
         {
+            AllureLifecycle.Instance.RunStep("Get amount of cash on the second field of the currency converter", () =>
+            {
+                
+            }, CurrencyConverterSecondField.GetAttribute("value"));
+
             return CurrencyConverterSecondField.GetAttribute("value");
         }
 
         public void SetCurrencyConverterFirstCurrency(string currency)
         {
-            this.currencyLocator = By.XPath($"//span[@class='text'][contains(text(),'{currency}')]");
+            AllureLifecycle.Instance.RunStep("Set currency in first field of the currency converter", () =>
+            {
+                this.currencyLocator = By.XPath($"//span[@class='text'][contains(text(),'{currency}')]");
 
-            CurrencyConverterFirstDropDownMenuButton.Click();
+                CurrencyConverterFirstDropDownMenuButton.Click();
 
-            IWebElement currencyButton = CurrencyConverterFirstDropDownMenuTd.FindElement(currencyLocator);
-            currencyButton.Click();
+                IWebElement currencyButton = CurrencyConverterFirstDropDownMenuTd.FindElement(currencyLocator);
+                currencyButton.Click();
+            }, currency);
         }
 
         public void SetCurrencyConverterSecondCurrency(string currency)

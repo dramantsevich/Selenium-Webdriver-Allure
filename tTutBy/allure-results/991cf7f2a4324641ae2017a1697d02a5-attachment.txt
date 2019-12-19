@@ -1,2 +1,0 @@
-2019-12-12 12:34:52,414 [NonParallelWorker] INFO  tTutBy.TestListener [(null)] - TestSuccess
-15858 [NonParallelWorker] INFO tTutBy.TestListener (null) - TestSuccess

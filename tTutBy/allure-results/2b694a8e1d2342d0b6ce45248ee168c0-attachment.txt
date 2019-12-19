@@ -1,4 +1,0 @@
-2019-12-12 12:36:40,152 [NonParallelWorker] INFO  tTutBy.TestListener [(null)] - Starting test method IsChangedDropDownMenuCurrency
-12686 [NonParallelWorker] INFO tTutBy.TestListener (null) - Starting test method IsChangedDropDownMenuCurrency
-2019-12-12 12:37:01,560 [NonParallelWorker] INFO  tTutBy.TestListener [(null)] - TestSuccess
-34094 [NonParallelWorker] INFO tTutBy.TestListener (null) - TestSuccess

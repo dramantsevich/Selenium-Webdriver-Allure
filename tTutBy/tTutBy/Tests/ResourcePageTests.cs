@@ -1,7 +1,8 @@
 ﻿using tTutBy.Pages;
 using NUnit.Framework;
 using tTutBy.Pages.Popups;
-using NUnit.Allure.Attributes;
+using Allure.NUnit.Attributes;
+using Allure.Commons.Model;
 using Allure.Commons;
 
 namespace tTutBy.Tests
@@ -11,9 +12,9 @@ namespace tTutBy.Tests
     {
         [Test]
         [AllureTag("TC-8")]
-        [AllureSeverity(SeverityLevel.minor)]
+        [AllureSeverity(SeverityLevel.Minor)]
         [AllureOwner("Ramantsevich Dzmitry")]
-        [AllureSuite("ResourcePageTests")]
+        [AllureSubSuite("ResourcePageTests")]
         public void LogoClick_IsHomePageOpen()
         {
             TopBarPanel topBarPanel = homePage.OpenTopBarPanel();
@@ -22,7 +23,7 @@ namespace tTutBy.Tests
 
             HomePage pageHome = resourcePage.LogoClick();
 
-            Assert.IsTrue(pageHome.IsNewsBlockDisplayed());
+            AllureLifecycle.Instance.Verify.That("News block displayed", () => pageHome.IsNewsBlockDisplayed(), Is.True);
         }
     }
 }

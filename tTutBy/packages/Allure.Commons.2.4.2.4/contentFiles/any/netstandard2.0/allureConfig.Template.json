@@ -1,6 +1,0 @@
-﻿{
-  "allure": {
-    "directory": "allure-results", // optional, default value is "allure-results"
-    "title": "custom run title", // optional
-  }
-}
