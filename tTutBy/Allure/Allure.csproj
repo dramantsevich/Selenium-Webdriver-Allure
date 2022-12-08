@@ -31,7 +31,7 @@ More detailed how to use of the attribute, can find here: https://github.com/Nok
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Noksa.Allure.StepInjector" Version="1.0.0">
       <PrivateAssets>contentfiles;analyzers</PrivateAssets>
     </PackageReference>
